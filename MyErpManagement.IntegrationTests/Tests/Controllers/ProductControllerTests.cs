@@ -26,7 +26,7 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             await AuthenticateAsync();
 
             // 此時的 Client 已經帶有 Bearer Token
-            var response = await Client.PostAsJsonAsync("/api/product", new CreateProductRequestDto
+            var response = await Client.PostAsJsonAsync(ApiUrlConstant.Product.ProductCRUD, new CreateProductRequestDto
             {
                 Name = ProductConstant.Name,
                 Specification = ProductConstant.Specification,
@@ -46,7 +46,7 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
         {
             await AuthenticateAsync();
             // 此時的 Client 已經帶有 Bearer Token
-            var response = await Client.PostAsJsonAsync("/api/product", new
+            var response = await Client.PostAsJsonAsync(ApiUrlConstant.Product.ProductCRUD, new
             {
                 Specification = ProductConstant.Specification,
                 Code = ProductConstant.Code,

@@ -35,7 +35,7 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
                 Password = UserConstant.Password
             };
 
-            var response = await _client.PostAsJsonAsync("/api/auth/login", loginDto);
+            var response = await _client.PostAsJsonAsync(ApiUrlConstant.Auth.Login, loginDto);
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 var errorDetail = await response.Content.ReadAsStringAsync();
@@ -62,7 +62,7 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
         {
             var loginDto = new LoginRequestDto { Account = UserConstant.Account, Password = "wrongpassword" };
 
-            var response = await _client.PostAsJsonAsync("/api/auth/login", loginDto);
+            var response = await _client.PostAsJsonAsync(ApiUrlConstant.Auth.Login, loginDto);
             if (response.StatusCode != HttpStatusCode.BadRequest)
             {
                 var errorDetail = await response.Content.ReadAsStringAsync();
@@ -79,7 +79,7 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
         {
             var loginDto = new LoginRequestDto { Account = "WrongAccount", Password = "wrongpassword" };
 
-            var response = await _client.PostAsJsonAsync("/api/auth/login", loginDto);
+            var response = await _client.PostAsJsonAsync(ApiUrlConstant.Auth.Login, loginDto);
             if (response.StatusCode != HttpStatusCode.BadRequest)
             {
                 var errorDetail = await response.Content.ReadAsStringAsync();
