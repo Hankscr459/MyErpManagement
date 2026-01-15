@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MyErpManagement.Api/MyErpManagement.Api.csproj" />
+  <Project Path="MyErpManagement.Core/MyErpManagement.Core.csproj" Id="5a63a7c6-e1f3-4acd-94bb-9fbac085d697" />
+  <Project Path="MyErpManagement.DataBase/MyErpManagement.DataBase.csproj" Id="5193d950-4b1b-440e-9dbe-fe8b49d0936e" />
+  <Project Path="MyErpManagement.IntegrationTests/MyErpManagement.IntegrationTests.csproj" Id="7bf81467-e2c3-4cc7-a98b-0c5bcfb47257" />
+</Solution>

@@ -1,0 +1,29 @@
+# --- 你的特定需求 ---
+# 排除整合測試產生的結果與涵蓋範圍報告
+TestResults/
+coveragereport/
+
+# --- .NET 標準排除項目 ---
+# 排除編譯產出的二進位檔
+[Bb]in/
+[Oo]bj/
+
+# 排除 Visual Studio 產生的暫存檔與使用者設定
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+
+# 排除 Rider / JetBrains 產生的檔案
+.idea/
+
+# 排除 VS Code 產生的檔案
+.vscode/
+
+# 排除套件管理產生的目錄
+packages/
+node_modules/
+
+# 排除本地環境設定檔（通常包含敏感資訊）
+appsettings.Development.json
+appsettings.Local.json
