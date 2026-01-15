@@ -23,6 +23,7 @@ namespace MyErpManagement.Core.IRepositories
         /// <returns></returns>
         Task<List<TEntity>> FindAllByFilterAndSelectAsync<TEntity>(Expression<Func<T, bool>> filter, Expression<Func<T, TEntity>> selector);
 
+        IQueryable<TEntity> FilterListQuery<TEntity>(Expression<Func<T, bool>> filter, Expression<Func<T, TEntity>> selector);
 
         void Add(T entity);
         Task AddAsync(T entity);

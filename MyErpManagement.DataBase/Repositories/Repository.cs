@@ -39,6 +39,11 @@ namespace MyErpManagement.DataBase.Repositories
             return await dbSet.Where(filter).AsNoTracking().Select(selector).ToListAsync();
         }
 
+        public virtual IQueryable<TEntity> FilterListQuery<TEntity>(Expression<Func<T, bool>> filter, Expression<Func<T, TEntity>> selector)
+        {
+            return dbSet.Where(filter).AsNoTracking().Select(selector);
+        }
+
         #endregion
 
         #region 讀取 & 修改 方法 (Read & Udate)

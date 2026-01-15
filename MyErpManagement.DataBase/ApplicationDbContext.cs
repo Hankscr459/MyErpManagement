@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MyErpManagement.Core.Modules.CustomerModule.Entities;
 using MyErpManagement.Core.Modules.JwtModule.Entities;
 using MyErpManagement.Core.Modules.ProductsModule.Entities;
 using MyErpManagement.Core.Modules.UsersModule.Entities;
-using MyErpManagement.Core.Modules.UsersModule.IServices;
 using MyErpManagement.DataBase.Configurations;
 
 namespace MyErpManagement.DataBase
@@ -20,6 +20,7 @@ namespace MyErpManagement.DataBase
         public DbSet<JwtRecord> JwtRecords { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Product> Products{ get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
