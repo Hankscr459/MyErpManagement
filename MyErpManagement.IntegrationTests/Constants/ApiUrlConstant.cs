@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MyErpManagement.IntegrationTests.Constants
+﻿namespace MyErpManagement.IntegrationTests.Constants
 {
     public static class ApiUrlConstant
     {
