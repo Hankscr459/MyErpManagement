@@ -5,10 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using MyErpManagement.Api.Attributes;
 using MyErpManagement.Api.Constants;
 using MyErpManagement.Core.Dtos.Customers.Request;
+using MyErpManagement.Core.Dtos.Customers.response;
 using MyErpManagement.Core.Dtos.Shared;
 using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.CustomerModule.Entities;
 using MyErpManagement.Core.Modules.UsersModule.Constants;
+using MyErpManagement.DataBase.Helpers;
 using System.Net;
 
 namespace MyErpManagement.Api.Controllers
@@ -53,6 +55,19 @@ namespace MyErpManagement.Api.Controllers
             return Ok(customer);
         }
 
+        /// <summary>
+        /// 客戶清單頁面
+        /// </summary>
+        /// <param name="customerListQueryRequestDto"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HasPermission(PermissionKeysConstant.Customer.ReadCustomerList.Key)]
+        public async Task<ActionResult<CustomerListResponseDto>> ReadCustomerList([FromQuery] CustomerListQueryRequestDto customerListQueryRequestDto)
+        {
+            var query = unitOfWork.CustomerRepository.GetSearchQuery(customerListQueryRequestDto);
+            var list = await query.ToPagedListAsync(customerListQueryRequestDto.Page, customerListQueryRequestDto.Limit);
+            return mapper.Map<CustomerListResponseDto>(list);
+        }
 
         /// <summary>
         /// 修改客戶

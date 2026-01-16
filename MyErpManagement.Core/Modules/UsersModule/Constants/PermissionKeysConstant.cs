@@ -56,6 +56,12 @@
                 public const string Name = "Customer:查看客戶";
             }
 
+            public static class ReadCustomerList
+            {
+                public const string Key = "Customer:ReadCustomerList";
+                public const string Name = "Customer:查看客戶清單";
+            }
+
             public static class UpdateCustomer
             {
                 public const string Key = "Customer:UpdateCustomer";
