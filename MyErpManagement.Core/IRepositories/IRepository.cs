@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using MyErpManagement.Core.Models;
+using System.Linq.Expressions;
 
 namespace MyErpManagement.Core.IRepositories
 {
@@ -24,7 +25,7 @@ namespace MyErpManagement.Core.IRepositories
         Task<List<TEntity>> FindAllByFilterAndSelectAsync<TEntity>(Expression<Func<T, bool>> filter, Expression<Func<T, TEntity>> selector);
 
         IQueryable<TEntity> FilterListQuery<TEntity>(Expression<Func<T, bool>> filter, Expression<Func<T, TEntity>> selector);
-
+        
         void Add(T entity);
         Task AddAsync(T entity);
         Task AddRangeAsync(IEnumerable<T> entities);

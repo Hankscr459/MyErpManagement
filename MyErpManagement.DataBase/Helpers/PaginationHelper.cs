@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyErpManagement.Core.Models;
 
-namespace MyErpManagement.Core.Helpers
+namespace MyErpManagement.DataBase.Helpers
 {
     public static class PaginationHelper
     {

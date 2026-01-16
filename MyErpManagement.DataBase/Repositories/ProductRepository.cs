@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MyErpManagement.Core.Modules.ProductsModule.Entities;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.Models;
+using System.Linq.Expressions;
 
 namespace MyErpManagement.DataBase.Repositories
 {
@@ -14,7 +15,9 @@ namespace MyErpManagement.DataBase.Repositories
             _db = db;
         }
 
-        public async Task<IQueryable<Product>> FindProductsByQuery(ProductListQueryModel productListQuery)
+        public async Task<IQueryable<TResult>> FindProductsByQuery<TResult>(
+            ProductListQueryModel productListQuery,
+            Expression<Func<Product, TResult>> selector)
         {
             // 解決方法：先取得符合條件的 ID 列表，這讓後續 query 變回簡單的 LINQ
             var paramValue = (object?)productListQuery.CategroyId ?? DBNull.Value;
@@ -34,9 +37,10 @@ namespace MyErpManagement.DataBase.Repositories
 
             var query = _db.Products
                 .AsNoTracking()
+                .Include(p => p.ProductCategory)
                 .Where(p => productListQuery.CategroyId == null || categoryIds.Contains(p.ProductCategoryId));
             query = ApplySorting(query, productListQuery);
-            return query;
+            return query.Select(selector);
         }
 
         private static IQueryable<Product> ApplySorting(

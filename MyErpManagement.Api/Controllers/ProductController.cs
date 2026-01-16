@@ -6,11 +6,11 @@ using MyErpManagement.Api.Helpers;
 using MyErpManagement.Core.Dtos.Products.Request;
 using MyErpManagement.Core.Dtos.Products.Response;
 using MyErpManagement.Core.Dtos.Shared;
-using MyErpManagement.Core.Helpers;
 using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.Entities;
 using MyErpManagement.Core.Modules.ProductsModule.Models;
 using MyErpManagement.Core.Modules.UsersModule.Constants;
+using MyErpManagement.DataBase.Helpers;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace MyErpManagement.Api.Controllers
@@ -49,7 +49,8 @@ namespace MyErpManagement.Api.Controllers
         public async Task<ActionResult<ProductListResponseDto>> ProductList([FromQuery] ProductListQueryRequestDto productListQueryRequestDto)
         {
             var productListQuery = mapper.Map<ProductListQueryModel>(productListQueryRequestDto);
-            var ProductListQueryable = await unitOfWork.ProductRepository.FindProductsByQuery(productListQuery);
+            var ProductListQueryable = await unitOfWork.ProductRepository.FindProductsByQuery(productListQuery, p =>
+                mapper.Map<ProductListItemDto>(p));
             var list = await ProductListQueryable.ToPagedListAsync(productListQuery.Page, productListQuery.Limit);
             return mapper.Map<ProductListResponseDto>(list);
         }
