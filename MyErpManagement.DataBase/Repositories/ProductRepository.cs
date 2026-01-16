@@ -1,6 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using MyErpManagement.Core.Enums;
 using MyErpManagement.Core.Modules.ProductsModule.Entities;
+using MyErpManagement.Core.Modules.ProductsModule.Enums;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.Models;
 using System.Linq.Expressions;
@@ -47,23 +49,23 @@ namespace MyErpManagement.DataBase.Repositories
             IQueryable<Product> query,
             ProductListQueryModel model)
         {
-            var isDesc = model.SortDir?.ToLower() == "desc";
+            var isDesc = model.SortDir == SortDirEnum.desc;
 
             return model.SortBy switch
             {
-                "Name" => isDesc
+                ProductListSortByEnum.name => isDesc
                     ? query.OrderByDescending(p => p.Name)
                     : query.OrderBy(p => p.Name),
 
-                "SalesPrice" => isDesc
+                ProductListSortByEnum.salesPrice => isDesc
                     ? query.OrderByDescending(p => p.SalesPrice)
                     : query.OrderBy(p => p.SalesPrice),
 
-                "PurchasePrice" => isDesc
+                ProductListSortByEnum.purchasePrice => isDesc
                     ? query.OrderByDescending(p => p.PurchasePrice)
                     : query.OrderBy(p => p.PurchasePrice),
 
-                "CreatedAt" => isDesc
+                ProductListSortByEnum.createdAt => isDesc
                     ? query.OrderByDescending(p => p.CreatedAt)
                     : query.OrderBy(p => p.CreatedAt),
 
