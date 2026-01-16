@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyErpManagement.Core.IRepositories;
+using System;
 using System.Linq.Expressions;
 
 namespace MyErpManagement.DataBase.Repositories
@@ -31,9 +32,20 @@ namespace MyErpManagement.DataBase.Repositories
         }
         #endregion
 
+
+        #region 修改 (Update)
+
+        public void Update(T entity)
+        {
+            dbSet.Entry(entity).State = EntityState.Modified;
+        }
+
+        #endregion 修改 (Update)
+
+
         #region 讀取方法 (Read)
 
-        
+
         public virtual async Task<List<TEntity>> FindAllByFilterAndSelectAsync<TEntity>(Expression<Func<T, bool>> filter, Expression<Func<T, TEntity>> selector)
         {
             return await dbSet.Where(filter).AsNoTracking().Select(selector).ToListAsync();
@@ -45,6 +57,7 @@ namespace MyErpManagement.DataBase.Repositories
         }
 
         #endregion
+
 
         #region 讀取 & 修改 方法 (Read & Udate)
         protected IQueryable<T> BuildQuery(
@@ -89,6 +102,7 @@ namespace MyErpManagement.DataBase.Repositories
 
         #endregion
 
+
         #region 刪除 (Delete)
 
         public virtual void Remove(T entity)
@@ -101,10 +115,10 @@ namespace MyErpManagement.DataBase.Repositories
             dbSet.RemoveRange(entity);
         }
 
-        public void RemoveByIdList(IEnumerable<string> ids)
+        public void RemoveByIdList(IEnumerable<Guid> ids)
         {
             // ExecuteDelete 會立即對資料庫下指令，它不經過 SaveChanges()。
-            dbSet.Where(e => ids.Contains(EF.Property<string>(e, "Id")))
+            dbSet.Where(e => ids.Contains(EF.Property<Guid>(e, "Id")))
                  .ExecuteDelete();
         }
 
