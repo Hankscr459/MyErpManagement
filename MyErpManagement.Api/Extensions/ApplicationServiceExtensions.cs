@@ -8,6 +8,7 @@ using MyErpManagement.Api.Helpers;
 using MyErpManagement.Core.Exceptions.IParsers;
 using MyErpManagement.Core.Exceptions.Parsers;
 using MyErpManagement.Core.IRepositories;
+using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IServices;
 using MyErpManagement.Core.Modules.JwtModule.Services;
@@ -78,6 +79,7 @@ namespace MyErpManagement.Api.Extensions
             services.AddScoped<IJwtRecordRepository, JwtRecordRepository>();
             services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddMapster();
             return services;

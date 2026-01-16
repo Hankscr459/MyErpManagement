@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using MyErpManagement.Core.IRepositories;
+using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
@@ -14,7 +15,8 @@ namespace MyErpManagement.DataBase.Repositories
         IPermissionRepository permissionRepository,
         IJwtRecordRepository jwtRecordRepository,
         IProductCategoryRepository productCategoryRepository,
-        IProductRepository productRepository
+        IProductRepository productRepository,
+        ICustomerRepository customerRepository
         ) : IUnitOfWork
     {
         public IUserRepository UserRepository => userRepository;
@@ -25,6 +27,7 @@ namespace MyErpManagement.DataBase.Repositories
         public IProductCategoryRepository ProductCategoryRepository => productCategoryRepository;
 
         public IProductRepository ProductRepository => productRepository;
+        public ICustomerRepository CustomerRepository => customerRepository;
 
         private IDbContextTransaction? _currentTransaction;
 

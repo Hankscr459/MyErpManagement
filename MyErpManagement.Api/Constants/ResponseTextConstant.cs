@@ -9,6 +9,9 @@
             public const string InvalidPassword = "無效的密碼";
             public const string FailToSaveDb = "資料儲存失敗";
             public const string InvalidDto = "參數驗證失敗";
+            public const string FailToUpdateCustomer = "客戶更新失敗";
+            public const string FailToCreateCustomer = "客戶新增失敗";
+            public const string FailToDeleteCustomer = "客戶移除失敗";
         }
         public static class UnAuthorized
         {
@@ -24,6 +27,7 @@
         public static class NotFound
         {
             public const string User = "使用者不存在";
+            public const string Customer = "客戶不存在";
         }
 
         public static class Conflict
