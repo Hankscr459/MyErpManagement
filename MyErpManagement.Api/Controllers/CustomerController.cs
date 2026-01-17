@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyErpManagement.Api.Attributes;
 using MyErpManagement.Api.Constants;
+using MyErpManagement.Api.Helpers;
 using MyErpManagement.Core.Dtos.Customers.Request;
 using MyErpManagement.Core.Dtos.Customers.response;
 using MyErpManagement.Core.Dtos.Shared;
@@ -30,9 +31,18 @@ namespace MyErpManagement.Api.Controllers
         public async Task<ActionResult> CreateCustomer([FromBody] CreateCustomerRequestDto createCustomerRequestDto)
         {
             var customerEntity = mapper.Map<Customer>(createCustomerRequestDto);
-            await unitOfWork.CustomerRepository.AddAsync(customerEntity);
-            if (!await unitOfWork.Complete())
+            customerEntity.Id = new Guid();
+            await unitOfWork.BeginTransactionAsync();
+            try
             {
+                await unitOfWork.CustomerRepository.AddAsync(customerEntity);
+                await unitOfWork.Complete();
+                await unitOfWork.CustomerRepository.UpdateCustomerTags(customerEntity.Id, createCustomerRequestDto.CustomerTagIds);
+                await unitOfWork.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await unitOfWork.RollbackAsync();
                 return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToUpdateCustomer));
             }
             return NoContent();
@@ -45,14 +55,25 @@ namespace MyErpManagement.Api.Controllers
         /// <returns></returns>
         [HttpGet("{customerId}")]
         [HasPermission(PermissionKeysConstant.Customer.ReadCustomer.Key)]
-        public async Task<ActionResult<Customer>> ReadCustomer(Guid customerId)
+        public async Task<ActionResult<CustomerResponseDto>> ReadCustomer(Guid customerId)
         {
-            var customer = await unitOfWork.CustomerRepository.FindOneByFilterOrUpdate(c => c.Id == customerId);
+            var customer = await unitOfWork.CustomerRepository.GetQueryable(c => c.Id == customerId)
+                .Include(c => c.CustomerTagRelations)
+                .ThenInclude(ctr => ctr.CustomerTag)
+                .FirstOrDefaultAsync(c => c.Id == customerId);
             if (customer is null)
             {
                 return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Customer));
             }
-            return Ok(customer);
+            var customerTags = customer.CustomerTagRelations
+                .Select(ctr => new CustomerTagResponseDto
+                {
+                    Id = ctr.CustomerTag.Id,
+                    Name = ctr.CustomerTag.Name
+                }).ToList();
+            var customerResponseDto = mapper.Map<CustomerResponseDto>(customer);
+            customerResponseDto.CustomerTags = customerTags;
+            return Ok(customerResponseDto);
         }
 
         /// <summary>
@@ -79,15 +100,21 @@ namespace MyErpManagement.Api.Controllers
         [HasPermission(PermissionKeysConstant.Customer.UpdateCustomer.Key)]
         public async Task<IActionResult> UpdateCustomer(Guid customerId, [FromBody] UpdateCustomerRequestDto updateCustomerRequestDto)
         {
-            var customer = await unitOfWork.CustomerRepository.FindOneByFilterOrUpdate(c => c.Id == customerId);
-            if (customer is null)
+            var customer = await unitOfWork.CustomerRepository.GetFirstOrDefaultAsync(c => c.Id == customerId);
+            await unitOfWork.BeginTransactionAsync();
+            try
             {
-                return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Customer));
+                unitOfWork.CustomerRepository.Update(updateCustomerRequestDto.Adapt(customer));
+                if (!await unitOfWork.Complete())
+                {
+                    return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, "ResponseTextConstant.BadRequest.FailToUpdateCustomer"));
+                }
+                await unitOfWork.CustomerRepository.UpdateCustomerTags(customer.Id, updateCustomerRequestDto.CustomerTagIds);
+                await unitOfWork.CommitAsync();
             }
-
-            unitOfWork.CustomerRepository.Update(updateCustomerRequestDto.Adapt(customer));
-            if (!await unitOfWork.Complete())
+            catch (Exception ex)
             {
+                await unitOfWork.RollbackAsync();
                 return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToUpdateCustomer));
             }
 
@@ -103,7 +130,7 @@ namespace MyErpManagement.Api.Controllers
         [HasPermission(PermissionKeysConstant.Customer.DeleteCustomer.Key)]
         public async Task<ActionResult> DeleteCustomer(Guid customerId)
         {
-            var customer = await unitOfWork.CustomerRepository.FindOneByFilterOrUpdate(c => c.Id == customerId);
+            var customer = await unitOfWork.CustomerRepository.GetFirstOrDefaultAsync(c => c.Id == customerId);
             if (customer is null)
             {
                 return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Customer));
@@ -128,6 +155,77 @@ namespace MyErpManagement.Api.Controllers
             if (deleteManyCustomersRequestDto is null || !deleteManyCustomersRequestDto.Any()) return BadRequest("請提供要刪除的 ID 列表");
 
             unitOfWork.CustomerRepository.RemoveByIdList(deleteManyCustomersRequestDto);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// 新增客戶標籤
+        /// </summary>
+        /// <param name="createCustomerTagRequestDto"></param>
+        /// <returns></returns>
+        [HttpPost("customerTag")]
+        [HasPermission(PermissionKeysConstant.CustomerTag.CreateCustomerTag.Key)]
+        public async Task<ActionResult> CreateCustomerTag([FromBody] CreateCustomerTagRequestDto createCustomerTagRequestDto)
+        {
+            var customerTagEntity = mapper.Map<CustomerTag>(createCustomerTagRequestDto);
+            customerTagEntity.CreatedBy = User.GetUserId();
+            await unitOfWork.CustomerTagRepository.AddAsync(customerTagEntity);
+            if (!await unitOfWork.Complete())
+            {
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToCreateCustomerTag));
+            }
+            return NoContent();
+        }
+
+        /// <summary>
+        /// 查看客戶標籤
+        /// </summary>
+        /// <param name="customerTagId"></param>
+        /// <returns></returns>
+        [HttpGet("customerTag/{customerTagId}")]
+        [HasPermission(PermissionKeysConstant.CustomerTag.ReadCustomerTag.Key)]
+        public async Task<ActionResult<CustomerTag>> GetCustomerTag(Guid customerTagId)
+        {
+            var customerTag = await unitOfWork.CustomerTagRepository.GetFirstOrDefaultAsync(c => c.Id == customerTagId);
+            if (customerTag is null)
+            {
+                return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.CustomerTag));
+            }
+            return Ok(customerTag);
+        }
+
+        /// <summary>
+        /// 查看客戶標籤清單
+        /// </summary>
+        /// <param name="customerTagId"></param>
+        /// <returns></returns>
+        [HttpGet("customerTags")]
+        [HasPermission(PermissionKeysConstant.CustomerTag.ReadCustomerTags.Key)]
+        public async Task<ActionResult<IEnumerable<CustomerTag>>> GetCustomerTags(Guid customerTagId)
+        {
+            var customerTags = await unitOfWork.CustomerTagRepository.GetAllAsync(c => true);
+            return Ok(customerTags);
+        }
+
+
+        [HttpPut("customerTag/{customerTagId}")]
+        [HasPermission(PermissionKeysConstant.CustomerTag.UpdateCustomerTag.Key)]
+        public async Task<IActionResult> UpdateCustomerTag(Guid customerTagId, [FromBody] UpdateCustomerRequestTagDto updateCustomerRequestTagDto)
+        {
+            var customerTag = await unitOfWork.CustomerTagRepository.GetFirstOrDefaultAsync(c => c.Id == customerTagId);
+            if (customerTag is null)
+            {
+                return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Customer));
+            }
+
+            customerTag = updateCustomerRequestTagDto.Adapt(customerTag);
+            customerTag.UpdateAt = DateTime.UtcNow;
+            unitOfWork.CustomerTagRepository.Update(customerTag);
+            if (!await unitOfWork.Complete())
+            {
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToUpdateCustomer));
+            }
+
             return NoContent();
         }
     }

@@ -29,5 +29,7 @@ namespace MyErpManagement.Core.Modules.ProductsModule.Models
         /// 關鍵字查詢
         /// </summary>
         public string? Search { get; set; }
+
+        public IEnumerable<Guid>? CustomerTagIds { get; set; }
     }
 }

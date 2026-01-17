@@ -12,6 +12,7 @@
             public const string FailToUpdateCustomer = "客戶更新失敗";
             public const string FailToCreateCustomer = "客戶新增失敗";
             public const string FailToDeleteCustomer = "客戶移除失敗";
+            public const string FailToCreateCustomerTag = "客戶標籤新增失敗";
         }
         public static class UnAuthorized
         {
@@ -28,6 +29,7 @@
         {
             public const string User = "使用者不存在";
             public const string Customer = "客戶不存在";
+            public const string CustomerTag = "客戶標籤不存在";
         }
 
         public static class Conflict

@@ -7,11 +7,13 @@ namespace MyErpManagement.Core.Dtos.Customers.Request
         /// <summary>
         /// 名稱
         /// </summary>
+        [Required]
         public string Name { get; set; } = default!;
 
         /// <summary>
         /// 編碼
         /// </summary>
+        [Required]
         public string Code { get; set; } = default!;
 
         /// <summary>
@@ -29,5 +31,10 @@ namespace MyErpManagement.Core.Dtos.Customers.Request
         /// 備註
         /// </summary>
         public string? Notes { get; set; }
+
+        /// <summary>
+        /// 客戶標籤Id列表
+        /// </summary>
+        public List<Guid>? CustomerTagIds { get; set; }
     }
 }

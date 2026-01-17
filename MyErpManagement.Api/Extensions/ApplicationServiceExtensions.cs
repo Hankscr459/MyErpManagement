@@ -80,6 +80,7 @@ namespace MyErpManagement.Api.Extensions
             services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerTagRepository, CustomerTagRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddMapster();
             return services;

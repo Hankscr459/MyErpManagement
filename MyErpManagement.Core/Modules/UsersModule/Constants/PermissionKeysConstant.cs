@@ -80,5 +80,32 @@
                 public const string Name = "Customer:移除多筆客戶";
             }
         }
+
+        public static class CustomerTag
+        {
+            public static class CreateCustomerTag
+            {
+                public const string Key = "CustomerTag:CreateCustomerTag";
+                public const string Name = "CustomerTag:建立客戶標籤";
+            }
+
+            public static class ReadCustomerTag
+            {
+                public const string Key = "CustomerTag:ReadCustomerTag";
+                public const string Name = "CustomerTag:查看客戶標籤";
+            }
+
+            public static class ReadCustomerTags
+            {
+                public const string Key = "CustomerTag:ReadCustomerTags";
+                public const string Name = "CustomerTag:查看客戶標籤清單";
+            }
+
+            public static class UpdateCustomerTag
+            {
+                public const string Key = "CustomerTag:UpdateCustomerTag";
+                public const string Name = "CustomerTag:修改客戶標籤";
+            }
+        }
     }
 }

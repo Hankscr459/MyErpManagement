@@ -39,7 +39,7 @@ namespace MyErpManagement.Api.Controllers
             // 驗證使用者帳號
             //var user = await unitOfWork.UserRepository.GetUserByUserAccountAsync(loginDto.Account);
             var user = await unitOfWork.UserRepository
-                    .FindOneByFilterOrUpdate(u => u.Account == loginDto.Account);
+                    .GetFirstOrDefaultAsync(u => u.Account == loginDto.Account);
             if (user is null)
             {
                 return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.InvalidAccount));

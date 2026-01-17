@@ -14,6 +14,7 @@ namespace MyErpManagement.Core.IRepositories
         IProductCategoryRepository ProductCategoryRepository { get; }
         IProductRepository ProductRepository { get; }
         ICustomerRepository CustomerRepository { get; }
+        ICustomerTagRepository CustomerTagRepository { get; }
         int ExecuteSqlCommand(string sql, params SqlParameter[] sqlParameters);
 
         public void Save();

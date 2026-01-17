@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyErpManagement.Core.IRepositories;
-using System;
 using System.Linq.Expressions;
 
 namespace MyErpManagement.DataBase.Repositories
@@ -46,12 +45,12 @@ namespace MyErpManagement.DataBase.Repositories
         #region 讀取方法 (Read)
 
 
-        public virtual async Task<List<TEntity>> FindAllByFilterAndSelectAsync<TEntity>(Expression<Func<T, bool>> filter, Expression<Func<T, TEntity>> selector)
+        public virtual async Task<List<TEntity>> ProjectAsync<TEntity>(Expression<Func<T, bool>> filter, Expression<Func<T, TEntity>> selector)
         {
             return await dbSet.Where(filter).AsNoTracking().Select(selector).ToListAsync();
         }
 
-        public virtual IQueryable<TEntity> FilterListQuery<TEntity>(Expression<Func<T, bool>> filter, Expression<Func<T, TEntity>> selector)
+        public virtual IQueryable<TEntity> ProjectTo<TEntity>(Expression<Func<T, bool>> filter, Expression<Func<T, TEntity>> selector)
         {
             return dbSet.Where(filter).AsNoTracking().Select(selector);
         }
@@ -70,7 +69,7 @@ namespace MyErpManagement.DataBase.Repositories
             IQueryable<T> query = tracked ? dbSet : dbSet.AsNoTracking();
 
             // 2. 套用過濾條件
-            if (filter != null)
+            if (filter is not null)
             {
                 query = query.Where(filter);
             }
@@ -86,16 +85,20 @@ namespace MyErpManagement.DataBase.Repositories
 
             return query;
         }
-        public virtual async Task<T?> FindOneByFilterOrUpdate(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
+        public virtual async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
             // 調用封裝好的查詢建構器
             IQueryable<T> query = BuildQuery(filter, includeProperties, tracked);
             return await query.FirstOrDefaultAsync();
 
         }
-        
 
-        public virtual async Task<IEnumerable<T>> FindAllByFilterOrUpdate(Expression<Func<T, bool>>? filter, string? includeProperties = null)
+        public IQueryable<T> GetQueryable(Expression<Func<T, bool>> predicate)
+        {
+            return dbSet.AsNoTracking().Where(predicate);
+        }
+
+        public virtual async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter, string? includeProperties = null)
         {
             return await BuildQuery(filter, includeProperties).ToListAsync();
         }

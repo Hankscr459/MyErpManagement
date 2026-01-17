@@ -16,7 +16,8 @@ namespace MyErpManagement.DataBase.Repositories
         IJwtRecordRepository jwtRecordRepository,
         IProductCategoryRepository productCategoryRepository,
         IProductRepository productRepository,
-        ICustomerRepository customerRepository
+        ICustomerRepository customerRepository,
+        ICustomerTagRepository customerTagRepository
         ) : IUnitOfWork
     {
         public IUserRepository UserRepository => userRepository;
@@ -28,6 +29,7 @@ namespace MyErpManagement.DataBase.Repositories
 
         public IProductRepository ProductRepository => productRepository;
         public ICustomerRepository CustomerRepository => customerRepository;
+        public ICustomerTagRepository CustomerTagRepository => customerTagRepository;
 
         private IDbContextTransaction? _currentTransaction;
 
