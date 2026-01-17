@@ -21,6 +21,7 @@ namespace MyErpManagement.DataBase
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Product> Products{ get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Customer> CustomerTags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +31,10 @@ namespace MyErpManagement.DataBase
             modelBuilder.ApplyConfiguration(new JwtRecordConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+            modelBuilder.ApplyConfiguration(new CustomerTagConfiguration());
+            modelBuilder.ApplyConfiguration(new CustomerTagRelationConfiguration());
+            
             // 2. 設定 UserRole 中間表與複合主鍵
             modelBuilder.Entity<UserRole>(builder =>
             {
