@@ -12,6 +12,7 @@ using MyErpManagement.Core.Modules.ProductsModule.Models;
 using MyErpManagement.Core.Modules.UsersModule.Constants;
 using MyErpManagement.DataBase.Helpers;
 using Swashbuckle.AspNetCore.Filters;
+using System.Net;
 
 namespace MyErpManagement.Api.Controllers
 {
@@ -42,6 +43,21 @@ namespace MyErpManagement.Api.Controllers
                 return BadRequest("新增商品失敗");
             }
             return NoContent();
+        }
+
+        [HttpGet("{productId}")]
+        [HasPermission(PermissionKeysConstant.Product.ReadProductList.Key)]
+        public async Task<ActionResult<ProductListItemDto>> ReadProduct(Guid productId)
+        {
+            var product = await unitOfWork.ProductRepository.GetFirstOrDefaultAsync(
+                    p => p.Id == productId,
+                    "ProductCategory"
+                );
+            if (product is null)
+            {
+                return BadRequest(new ApiResponseDto(HttpStatusCode.NotFound, "查無此商品"));
+            }
+            return Ok(mapper.Map<ProductListItemDto>(product));
         }
 
         [HttpGet]
