@@ -35,14 +35,53 @@
                 public const string Name = "Product:建立商品分類";
             }
 
+            public static class ReadProduct
+            {
+                public const string Key = "Product:ReadProduct";
+                public const string Name = "Product:查看商品";
+            }
+
             public static class ReadProductList
             {
                 public const string Key = "Product:ReadProductList";
                 public const string Name = "Product:查看商品清單";
             }
+
+            public static class UpdateProduct
+            {
+                public const string Key = "Product:UpdateProduct";
+                public const string Name = "Product:修改商品";
+            }
         }
 
-        public static class Customer
+        public static class ProductCategory
+        {
+            public static class ReadProductCategory
+            {
+                public const string Key = "ProductCategory:ReadProductCategory";
+                public const string Name = "ProductCategory:查看商品分類";
+            }
+
+            public static class UpdateProductCategory
+            {
+                public const string Key = "ProductCategory:UpdateProductCategory";
+                public const string Name = "ProductCategory:修改商品分類";
+            }
+
+            public static class ReadProductCategoryTree
+            {
+                public const string Key = "ProductCategory:ReadProductCategoryTree";
+                public const string Name = "ProductCategory:查看商品分類樹狀結構";
+            }
+
+            public static class ReadProductCategories
+            {
+                public const string Key = "ProductCategory:ReadProductCategories";
+                public const string Name = "ProductCategory:查看商品分類清單";
+            }
+        }
+
+            public static class Customer
         {
             public static class CreateCustomer
             {

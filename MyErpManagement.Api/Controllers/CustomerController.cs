@@ -207,7 +207,12 @@ namespace MyErpManagement.Api.Controllers
             return Ok(customerTags);
         }
 
-
+        /// <summary>
+        /// 修改客戶標籤
+        /// </summary>
+        /// <param name="customerTagId"></param>
+        /// <param name="updateCustomerRequestTagDto"></param>
+        /// <returns></returns>
         [HttpPut("customerTag/{customerTagId}")]
         [HasPermission(PermissionKeysConstant.CustomerTag.UpdateCustomerTag.Key)]
         public async Task<IActionResult> UpdateCustomerTag(Guid customerTagId, [FromBody] UpdateCustomerRequestTagDto updateCustomerRequestTagDto)
