@@ -9,11 +9,18 @@
         /// 使用者Id
         /// </summary>
         public Guid Id { get; set; }
+
         /// <summary>
         /// 帳號
         /// </summary>
         /// <example>admin01</example>
         public string Account { get; set; } = default!;
+
+        /// <summary>
+        /// Email
+        /// </summary>
+        public string Email { get; set; } = default!;
+
         /// <summary>
         /// 權杖(JWT Token)
         /// </summary>

@@ -24,8 +24,10 @@ namespace MyErpManagement.DataBase.Configurations
             // 它是資料庫層級的規則： 只有當資料真正進到 SQL Server 儲存的那一刻，這個功能才會啟動。
             builder.Property(x => x.Id)
                     .HasDefaultValueSql("NEWSEQUENTIALID()");
-            // 配置索引
+
             builder.HasIndex(x => x.Account).IsUnique();
+
+            builder.HasIndex(x => x.Email).IsUnique();
 
             builder.Property(p => p.CreatedAt)
                 .HasDefaultValueSql("GETUTCDATE()");

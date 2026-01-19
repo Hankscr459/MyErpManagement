@@ -23,6 +23,7 @@ namespace MyErpManagement.Core.Modules.JwtModule.Services
             {
                 new Claim(LogInClaimConstant.UserId, user.Id.ToString()),
                 new Claim(LogInClaimConstant.Account, user.Account),
+                new Claim(LogInClaimConstant.Email, user.Email ?? ""),
                 new Claim(LogInClaimConstant.JwtRecordId, jwtRecordId)
             };
 

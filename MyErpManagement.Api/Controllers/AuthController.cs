@@ -37,9 +37,8 @@ namespace MyErpManagement.Api.Controllers
         public async Task<ActionResult<LoginResponseDto>> Login(LoginRequestDto loginDto)
         {
             // 驗證使用者帳號
-            //var user = await unitOfWork.UserRepository.GetUserByUserAccountAsync(loginDto.Account);
             var user = await unitOfWork.UserRepository
-                    .GetFirstOrDefaultAsync(u => u.Account == loginDto.Account);
+                    .GetFirstOrDefaultAsync(u => u.Account == loginDto.Account || u.Email == loginDto.Account);
             if (user is null)
             {
                 return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.InvalidAccount));
@@ -79,46 +78,19 @@ namespace MyErpManagement.Api.Controllers
             {
                 Id = user.Id,
                 Account = user.Account,
+                Email = user.Email,
                 Token = jwtResult.Token
             });
         }
 
-        [HttpGet("secret")]
-        [HasPermission(PermissionKeysConstant.Auth.Secret.Key)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SuccessResponseExample))]
-        public ActionResult<ApiResponseDto> Secret()
-        {
-            return Ok(new ApiResponseDto(HttpStatusCode.OK, "secret"));
-        }
 
-        [HttpGet("secret1")]
-        [Authorize]
-        [HasPermission(PermissionKeysConstant.Auth.Secret1.Key)]
-        [ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status200OK)]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SuccessResponseExample))]
-        public ActionResult<ApiResponseDto> Secret1()
-        {
-            return Ok(new ApiResponseDto(HttpStatusCode.OK, "secret1"));
-        }
-
-        [HttpGet("secret2")]
-        [Authorize]
-        [HasPermission(PermissionKeysConstant.Auth.Secret2.Key)]
-        [ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status200OK)]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SuccessResponseExample))]
-        public ActionResult<ApiResponseDto> Secret2()
-        {
-            return Ok(new ApiResponseDto(HttpStatusCode.OK, "secret2"));
-        }
-
-        [HttpGet("secret3")]
-        [HasQueryToken]
-        [ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status200OK)]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SuccessResponseExample))]
-        public ActionResult<ApiResponseDto> Secret3()
-        {
-            return Ok(new ApiResponseDto(HttpStatusCode.OK, "secret3"));
-        }
+        //[HttpGet("secret3")]
+        //[HasQueryToken]
+        //[ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status200OK)]
+        //[SwaggerResponseExample(StatusCodes.Status200OK, typeof(SuccessResponseExample))]
+        //public ActionResult<ApiResponseDto> Secret3()
+        //{
+        //    return Ok(new ApiResponseDto(HttpStatusCode.OK, "secret3"));
+        //}
     }
 }
