@@ -2,11 +2,16 @@
 {
     public class ResponseTextConstant
     {
+        public static class Ok
+        {
+            public const string SuccessSendEmailCode = "驗證碼已發送";
+        }
         public static class BadRequest
         {
             public const string RequiredQueryAccessToken = "沒有Query access_token參數";
             public const string InvalidAccount = "無效的帳號";
             public const string InvalidPassword = "無效的密碼";
+            public const string InvalidEmailCode = "無效的Email驗證碼";
             public const string FailToSaveDb = "資料儲存失敗";
             public const string InvalidDto = "參數驗證失敗";
             public const string FailToCreateProduct = "商品新增失敗";
@@ -17,6 +22,9 @@
             public const string FailToCreateCustomer = "客戶新增失敗";
             public const string FailToDeleteCustomer = "客戶移除失敗";
             public const string FailToCreateCustomerTag = "客戶標籤新增失敗";
+            public const string FailToSendEmailCode = "Email會員註冊驗證碼發送失敗";
+            public const string FailToReSendEmailCode = "Email會員註冊驗證碼尚未失效";
+            public const string FailToCreateUser = "使用者註冊失敗";
         }
         public static class UnAuthorized
         {
@@ -40,7 +48,8 @@
 
         public static class Conflict
         {
-            public const string DbEntityUniqueField = "資料重複";
+            public const string DbEntityUniqueField = "資料重複：唯一索引限制。";
+            public const string EmailAlreadyInUse = "Email已被使用";
         }
     }
 }

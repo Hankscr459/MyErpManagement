@@ -8,7 +8,11 @@ using MyErpManagement.Api.Helpers;
 using MyErpManagement.Core.Exceptions.IParsers;
 using MyErpManagement.Core.Exceptions.Parsers;
 using MyErpManagement.Core.IRepositories;
+using MyErpManagement.Core.Modules.CacheModule.IServices;
+using MyErpManagement.Core.Modules.CacheModule.Services;
 using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
+using MyErpManagement.Core.Modules.EmailModule.IServices;
+using MyErpManagement.Core.Modules.EmailModule.Services;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IServices;
 using MyErpManagement.Core.Modules.JwtModule.Services;
@@ -69,6 +73,13 @@ namespace MyErpManagement.Api.Extensions
             services.AddSwaggerExamplesFromAssemblyOf<BadRequestLoginResponseExample>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(config["Sql_Server_Connection_String"]));
+            services.AddStackExchangeRedisCache(options =>
+            {
+                // 從設定檔讀取連接字串
+                options.Configuration = config["Redis"];
+                // 選填：為所有 Key 加上前綴，避免多個應用程式衝突
+                options.InstanceName = config["Redis_Instance_Name"];
+            });
             services.AddCors();
             services.AddScoped<IExceptionParser, SqlExceptionParser>();
             services.AddScoped<IPasswordService, PasswordService>();
@@ -82,6 +93,8 @@ namespace MyErpManagement.Api.Extensions
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICustomerTagRepository, CustomerTagRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ICachService, CachService>();
             services.AddMapster();
             return services;
         }

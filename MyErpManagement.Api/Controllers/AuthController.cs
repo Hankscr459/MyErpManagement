@@ -1,27 +1,32 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MapsterMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyErpManagement.Api.Attributes;
 using MyErpManagement.Api.Constants;
 using MyErpManagement.Api.Examples.Auth;
-using MyErpManagement.Api.Examples.Shared;
 using MyErpManagement.Core.Dtos.Auth.Request;
 using MyErpManagement.Core.Dtos.Auth.Response;
 using MyErpManagement.Core.Dtos.Shared;
 using MyErpManagement.Core.IRepositories;
+using MyErpManagement.Core.Modules.CacheModule.IServices;
+using MyErpManagement.Core.Modules.EmailModule.IServices;
 using MyErpManagement.Core.Modules.JwtModule.Entities;
 using MyErpManagement.Core.Modules.JwtModule.IServices;
 using MyErpManagement.Core.Modules.JwtModule.Models;
-using MyErpManagement.Core.Modules.UsersModule.Constants;
+using MyErpManagement.Core.Modules.UsersModule.Entities;
 using MyErpManagement.Core.Modules.UsersModule.IServices;
 using Swashbuckle.AspNetCore.Filters;
 using System.Net;
+using System.Security.Cryptography;
 
 namespace MyErpManagement.Api.Controllers
 {
     public class AuthController(
         IUnitOfWork unitOfWork,
         IJwtService jwtService,
-        IPasswordService passwordHasher
+        IPasswordService passwordHasher,
+        IEmailService emailService,
+        ICachService cachService,
+        IMapper mapper
     ) : BaseApiController
     {
         /// <summary>
@@ -83,14 +88,66 @@ namespace MyErpManagement.Api.Controllers
             });
         }
 
+        
+        [HttpPost("verify-email/register")]
+        [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status409Conflict)]
+        [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ConflictVerifyEmailRegisterExample))]
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestVerifyEmailRegisterExample))]
+        public async Task<ActionResult<VerifyEmailResponseDto>> VerifyEmail([FromBody] VerifyEmailRequestDto verifyEmailRequestDto)
+        {
+            var existingUser = await unitOfWork.UserRepository
+                .GetFirstOrDefaultAsync(u => u.Email == verifyEmailRequestDto.Email);
+            if (existingUser is not null)
+            {
+                return Conflict(new ApiResponseDto(HttpStatusCode.Conflict, ResponseTextConstant.Conflict.EmailAlreadyInUse));
+            }
+            var emailCode = cachService.GetRegistCodeAsync(verifyEmailRequestDto.Email);
+            if (emailCode is not null)
+            {
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToReSendEmailCode));
+            }
+            string verificationCode = new Random().Next(100000, 999999).ToString();
+            var resendIntervalMinutes = await cachService.SaveRegisterCodeAsync(verifyEmailRequestDto.Email, verificationCode);
+            if (!await emailService.SendRegisterCode(verifyEmailRequestDto.Email, verificationCode))
+            {
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToSendEmailCode));
+            }
+            return Ok(new VerifyEmailResponseDto
+            {
+                Message = ResponseTextConstant.Ok.SuccessSendEmailCode,
+                ResendIntervalMinutes = resendIntervalMinutes
+            });
+        }
 
-        //[HttpGet("secret3")]
-        //[HasQueryToken]
-        //[ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status200OK)]
-        //[SwaggerResponseExample(StatusCodes.Status200OK, typeof(SuccessResponseExample))]
-        //public ActionResult<ApiResponseDto> Secret3()
-        //{
-        //    return Ok(new ApiResponseDto(HttpStatusCode.OK, "secret3"));
-        //}
+        [HttpPost("register")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status409Conflict)]
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestRegisterExample))]
+        [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ConflictRegisterExample))]
+        public async Task<ActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
+        {
+            var emailCode = cachService.GetRegistCodeAsync(registerRequestDto.Email);
+            if (emailCode is null || emailCode.Result != registerRequestDto.VerificationCode)
+            {
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.InvalidEmailCode));
+            }
+            var bytes = new byte[8];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(bytes);
+            var account = Convert.ToBase64String(bytes);
+            var userEntity = mapper.Map<User>(registerRequestDto);
+            userEntity.Account = account;
+            userEntity.PasswordSalt = passwordHasher.GenerateSalt();
+            userEntity.PasswordHash = passwordHasher.HashPassword(registerRequestDto.Password, userEntity.PasswordSalt);
+            unitOfWork.UserRepository.Add(userEntity);
+            if (!await unitOfWork.Complete())
+            {
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToCreateUser));
+            }
+            return NoContent();
+        }
     }
 }
