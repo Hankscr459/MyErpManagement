@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using MyErpManagement.Api.BackgroundServices;
 using MyErpManagement.Api.Examples.Auth;
 using MyErpManagement.Api.Filters;
 using MyErpManagement.Api.Helpers;
@@ -16,6 +17,8 @@ using MyErpManagement.Core.Modules.EmailModule.Services;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IServices;
 using MyErpManagement.Core.Modules.JwtModule.Services;
+using MyErpManagement.Core.Modules.MessageBusModule.IServices;
+using MyErpManagement.Core.Modules.MessageBusModule.Services;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IServices;
@@ -95,6 +98,11 @@ namespace MyErpManagement.Api.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICachService, CachService>();
+            services.AddScoped<IEmailService, EmailService>();
+            // 註冊 RabbitMQ 的發送者 (讓 API 控制器使用)
+            services.AddSingleton<IRabbitMqService, RabbitMqService>();
+            // 註冊背景消費者
+            services.AddHostedService<EmailConsumerWorker>();
             services.AddMapster();
             return services;
         }

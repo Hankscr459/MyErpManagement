@@ -12,6 +12,8 @@ using MyErpManagement.Core.Modules.EmailModule.IServices;
 using MyErpManagement.Core.Modules.JwtModule.Entities;
 using MyErpManagement.Core.Modules.JwtModule.IServices;
 using MyErpManagement.Core.Modules.JwtModule.Models;
+using MyErpManagement.Core.Modules.MessageBusModule.IServices;
+using MyErpManagement.Core.Modules.MessageBusModule.Models;
 using MyErpManagement.Core.Modules.UsersModule.Entities;
 using MyErpManagement.Core.Modules.UsersModule.IServices;
 using Swashbuckle.AspNetCore.Filters;
@@ -95,7 +97,7 @@ namespace MyErpManagement.Api.Controllers
         [ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status409Conflict)]
         [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ConflictVerifyEmailRegisterExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BadRequestVerifyEmailRegisterExample))]
-        public async Task<ActionResult<VerifyEmailResponseDto>> VerifyEmail([FromBody] VerifyEmailRequestDto verifyEmailRequestDto)
+        public async Task<ActionResult<VerifyEmailResponseDto>> VerifyEmail([FromBody] VerifyEmailRequestDto verifyEmailRequestDto, [FromServices] IRabbitMqService mqService)
         {
             var existingUser = await unitOfWork.UserRepository
                 .GetFirstOrDefaultAsync(u => u.Email == verifyEmailRequestDto.Email);
@@ -103,17 +105,18 @@ namespace MyErpManagement.Api.Controllers
             {
                 return Conflict(new ApiResponseDto(HttpStatusCode.Conflict, ResponseTextConstant.Conflict.EmailAlreadyInUse));
             }
-            var emailCode = cachService.GetRegistCodeAsync(verifyEmailRequestDto.Email);
+            var emailCode = await cachService.GetRegistCodeAsync(verifyEmailRequestDto.Email);
             if (emailCode is not null)
             {
                 return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToReSendEmailCode));
             }
             string verificationCode = new Random().Next(100000, 999999).ToString();
             var resendIntervalMinutes = await cachService.SaveRegisterCodeAsync(verifyEmailRequestDto.Email, verificationCode);
-            if (!await emailService.SendRegisterCode(verifyEmailRequestDto.Email, verificationCode))
-            {
-                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToSendEmailCode));
-            }
+
+            // 將寄信任務派發到 RabbitMQ
+            var emailTask = new EmailMessage { Email = verifyEmailRequestDto.Email, VerificationCode = verificationCode };
+            await mqService.PublishEmailTaskAsync(emailTask);
+
             return Ok(new VerifyEmailResponseDto
             {
                 Message = ResponseTextConstant.Ok.SuccessSendEmailCode,
@@ -129,8 +132,8 @@ namespace MyErpManagement.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ConflictRegisterExample))]
         public async Task<ActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
         {
-            var emailCode = cachService.GetRegistCodeAsync(registerRequestDto.Email);
-            if (emailCode is null || emailCode.Result != registerRequestDto.VerificationCode)
+            var emailCode = await cachService.GetRegistCodeAsync(registerRequestDto.Email);
+            if (emailCode is null || emailCode != registerRequestDto.VerificationCode)
             {
                 return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.InvalidEmailCode));
             }

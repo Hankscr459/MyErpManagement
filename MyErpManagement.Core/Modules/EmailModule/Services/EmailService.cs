@@ -22,11 +22,15 @@ namespace MyErpManagement.Core.Modules.EmailModule.Services
             request.AddParameter("subject", "My-Erp Proj Invite Email Code");
             request.AddParameter("text", "My-Erp 會員註冊驗證碼: " + verificationRegistCode);
             var response = await client.ExecuteAsync(request);
-            if (response.ErrorMessage is not null)
+            if (response.ErrorMessage is not null || !response.IsSuccessful)
             {
                 Console.WriteLine("Error sending email: " + response.ErrorMessage);
                 return false;
             }
+
+            // RabbitMQ測試用
+            //await Task.Delay(5000);
+
             return true;
         }
     }
