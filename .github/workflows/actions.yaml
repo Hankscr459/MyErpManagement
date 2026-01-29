@@ -32,7 +32,7 @@ jobs:
       rabbitmq:
         image: rabbitmq:3-management
         ports:
-          - ${{ secrets.Rabbit_MQ_Port }}:${{ secrets.Rabbit_MQ_Port }}
+          - ${{ secrets.RABBIT_MQ_PORT }}:${{ secrets.RABBIT_MQ_PORT }}
 
     steps:
     - uses: actions/checkout@v4
@@ -51,15 +51,15 @@ jobs:
     - name: Test
       env:
         # 對應你 Program.cs 與 Extension 中的 Config Key
-        Sql_Server_Connection_String:  ${{ secrets.Sql_Server_Connection_String }}
-        Redis: ${{ secrets.Redis }}
+        Sql_Server_Connection_String:  ${{ secrets.SQL_SERVER_CONNECTION_STRING }}
+        Redis: ${{ secrets.REDIS }}
         Redis_Instance_Name: CI_Test_
         Rabbit_MQ_Host: localhost
-        Rabbit_MQ_Port:  ${{ secrets.Rabbit_MQ_Port }}
+        Rabbit_MQ_Port:  ${{ secrets.RABBIT_MQ_PORT }}
         Rabbit_MQ_UserName: "guest"
         Rabbit_MQ_Password: "guest"
-        TokenKey: ${{ secrets.TokenKey }}
+        TokenKey: ${{ secrets.TOKENKEY }}
         Mail_Verify_Register_Code_Expiry: "2"
-        Mail_Gun_API_key: ${{ secrets.Mail_Gun_API_key }}
-        Mail_Gun_Domain: ${{ secrets.Mail_Gun_Domain }}
+        Mail_Gun_API_key: ${{ secrets.MAIL_GUN_API_KEY }}
+        Mail_Gun_Domain: ${{ secrets.MAIL_GUN_DOMAIN }}
       run: dotnet test --no-build --verbosity normal
