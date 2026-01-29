@@ -62,4 +62,8 @@ jobs:
         Mail_Verify_Register_Code_Expiry: "2"
         Mail_Gun_API_key: ${{ secrets.MAIL_GUN_API_KEY }}
         Mail_Gun_Domain: ${{ secrets.MAIL_GUN_DOMAIN }}
+        Seed_User_All_Permission_Salt: ${{ secrets.SEED_USER_PERMISSION_SALT }}
+        Seed_User_All_Permission_Hash: ${{ secrets.SEED_USER_PERMISSION_HASH }}
+        Seed_User_Some_Permission_Salt: ${{ secrets.SEED_USER_PERMISSION_SALT }}
+        Seed_User_Some_Permission_Hash: ${{ secrets.SEED_USER_PERMISSION_HASH }}
       run: dotnet test --no-build --verbosity normal
