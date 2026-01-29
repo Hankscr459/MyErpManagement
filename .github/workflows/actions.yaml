@@ -1,0 +1,65 @@
+name: .NET CI with Infrastructure
+
+# 定義觸發時機
+on:
+  push:
+    branches: [ "flow" ]
+  pull_request:
+    branches: [ "flow" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      # 1. SQL Server 服務
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: Y
+          MSSQL_SA_PASSWORD: ${{ secrets.SQL_PASSWORD }} # 測試環境建議使用強密碼
+          MSSQL_PID: Developer
+        ports:
+          - 1433:1433
+
+      # 2. Redis 服務
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+
+      # 3. RabbitMQ 服務
+      rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+          - ${{ secrets.Rabbit_MQ_Port }}:${{ secrets.Rabbit_MQ_Port }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Test
+      env:
+        # 對應你 Program.cs 與 Extension 中的 Config Key
+        Sql_Server_Connection_String:  ${{ secrets.Sql_Server_Connection_String }}
+        Redis: ${{ secrets.Redis }}
+        Redis_Instance_Name: CI_Test_
+        Rabbit_MQ_Host: localhost
+        Rabbit_MQ_Port:  ${{ secrets.Rabbit_MQ_Port }}
+        Rabbit_MQ_UserName: "guest"
+        Rabbit_MQ_Password: "guest"
+        TokenKey: ${{ secrets.TokenKey }}
+        Mail_Verify_Register_Code_Expiry: "2"
+        Mail_Gun_API_key: ${{ secrets.Mail_Gun_API_key }}
+        Mail_Gun_Domain: ${{ secrets.Mail_Gun_Domain }}
+      run: dotnet test --no-build --verbosity normal
