@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyErpManagement.Api.Constants;
 using MyErpManagement.Core.Dtos.Auth.Request;
@@ -17,11 +18,19 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
     {
         private readonly HttpClient _client;
         private readonly ApiWebApplicationFactory _factory;
+        protected IConfiguration _config { get; }
 
         public AuthControllerTests(ApiWebApplicationFactory factory)
         {
             _client = factory.CreateClient();
             _factory = factory;
+            var projectDir = Directory.GetCurrentDirectory();
+            // 根據 appsettings.json 的位置調整路徑
+            _config = new ConfigurationBuilder()
+                .SetBasePath(projectDir)
+                .AddJsonFile("appsettings.Testing.json", optional: false, reloadOnChange: true)
+                .AddUserSecrets<AuthControllerTests>(optional: true)
+                .Build();
         }
 
         [Fact]
@@ -89,6 +98,15 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             var result = await response.Content.ReadFromJsonAsync<ApiResponseDto>() ?? throw new Exception("登入帳號錯誤測試的回傳Token是空值");
             result.Message.Should().Be(ResponseTextConstant.BadRequest.InvalidAccount);
+        }
+
+        [Fact]
+        public async Task VerifyRegistEmail_Ok()
+        {
+            var verifyEmailDto = new VerifyEmailRequestDto { Email = _config["Test_Email"] };
+            var response = await _client.PostAsJsonAsync(ApiUrlConstant.Auth.VerifyEmail, verifyEmailDto);
+            var result = await response.Content.ReadFromJsonAsync<VerifyEmailResponseDto>() ?? throw new Exception("登入密碼錯誤測試的回傳Token是空值");
+            result.ResendIntervalMinutes.Should().BeGreaterThan(0);
         }
     }
 }
