@@ -59,7 +59,7 @@ jobs:
         Rabbit_MQ_UserName: guest
         Rabbit_MQ_Password: guest
         TokenKey: ${{ secrets.TOKENKEY }}
-        Mail_Verify_Register_Code_Expiry: "2"
+        Mail_Verify_Register_Code_Expiry: ${{ secrets.MAIL_VERIFY_REGISTER_CODE_EXPIRY }}
         Mail_Gun_API_key: ${{ secrets.MAIL_GUN_API_KEY }}
         Mail_Gun_Domain: ${{ secrets.MAIL_GUN_DOMAIN }}
         Seed_User_All_Permission_Salt: ${{ secrets.SEED_USER_PERMISSION_SALT }}
