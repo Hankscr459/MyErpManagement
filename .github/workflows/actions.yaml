@@ -55,7 +55,7 @@ jobs:
         Redis: ${{ secrets.REDIS }}
         Redis_Instance_Name: CI_Test_
         Rabbit_MQ_Host: localhost
-        Rabbit_MQ_Port:  "5672"
+        Rabbit_MQ_Port: "5672"
         Rabbit_MQ_UserName: guest
         Rabbit_MQ_Password: guest
         TokenKey: ${{ secrets.TOKENKEY }}
@@ -66,4 +66,5 @@ jobs:
         Seed_User_All_Permission_Hash: ${{ secrets.SEED_USER_PERMISSION_HASH }}
         Seed_User_Some_Permission_Salt: ${{ secrets.SEED_USER_PERMISSION_SALT }}
         Seed_User_Some_Permission_Hash: ${{ secrets.SEED_USER_PERMISSION_HASH }}
-      run: dotnet test --no-build --verbosity normal
+        JWT_ACCESS_EXPIRATION: ${{ secrets.JWT_ACCESS_EXPIRATION }}
+      run: dotnet test --no-build --verbosity normal  
