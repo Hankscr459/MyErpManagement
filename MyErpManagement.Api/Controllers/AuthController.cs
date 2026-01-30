@@ -102,7 +102,7 @@ namespace MyErpManagement.Api.Controllers
         {
             var existingUser = await unitOfWork.UserRepository
                 .GetFirstOrDefaultAsync(u => u.Email == verifyEmailRequestDto.Email);
-            if (existingUser is not null)
+            if (existingUser is not null && existingUser.Email != verifyEmailRequestDto.Email)
             {
                 Console.WriteLine("Email already in use: " + existingUser.Email);
                 Console.WriteLine("Email already in use: " + existingUser.Account);
