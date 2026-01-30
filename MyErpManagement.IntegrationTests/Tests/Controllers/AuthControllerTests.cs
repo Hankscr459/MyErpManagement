@@ -30,6 +30,7 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
                 .SetBasePath(projectDir)
                 .AddJsonFile("appsettings.Testing.json", optional: false, reloadOnChange: true)
                 .AddUserSecrets<AuthControllerTests>(optional: true)
+                .AddEnvironmentVariables()
                 .Build();
         }
 
