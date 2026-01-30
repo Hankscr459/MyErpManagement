@@ -98,7 +98,6 @@ namespace MyErpManagement.Api.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICachService, CachService>();
-            services.AddScoped<IEmailService, EmailService>();
             // 註冊 RabbitMQ 的發送者 (讓 API 控制器使用)
             services.AddSingleton<IRabbitMqService, RabbitMqService>();
             // 註冊背景消費者
