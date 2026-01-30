@@ -105,8 +105,10 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
         {
             var verifyEmailDto = new VerifyEmailRequestDto { Email = _config["Test_Email"] };
             var response = await _client.PostAsJsonAsync(ApiUrlConstant.Auth.VerifyEmail, verifyEmailDto);
-            var result = await response.Content.ReadFromJsonAsync<VerifyEmailResponseDto>() ?? throw new Exception("登入密碼錯誤測試的回傳Token是空值");
-            result.ResendIntervalMinutes.Should().Be(int.Parse(_config["Mail_Verify_Register_Code_Expiry"] ?? throw new Exception("Mail_Verify_Register_Code_Expiry是空值")));
+            var result = await response.Content.ReadFromJsonAsync<VerifyEmailResponseDto>() ?? throw new Exception("verifyEmail回傳是空值");
+            Console.WriteLine($"VerifyRegistEmail_Ok Message: {result.Message}");
+            Console.WriteLine($"VerifyRegistEmail_Ok ResendIntervalMinutes: {result.ResendIntervalMinutes}");
+            result.ResendIntervalMinutes.Should().Be(int.Parse(_config["Mail_Verify_Register_Code_Expiry"]));
         }
     }
 }
