@@ -9,6 +9,13 @@ namespace MyErpManagement.Core.Modules.EmailModule.Services
     {
         public async Task<bool> SendRegisterCode(string email, string verificationRegistCode)
         {
+            // 不發送Email
+            if (!bool.Parse(config["Send_Email"] ?? "true"))
+            {
+                Console.WriteLine("測試不送Email,因為Key的發送數量限制");
+                return true;
+            }
+
             var options = new RestClientOptions("https://api.mailgun.net")
             {
                 Authenticator = new HttpBasicAuthenticator("api", config["Mail_Gun_API_key"] ?? "API_KEY")

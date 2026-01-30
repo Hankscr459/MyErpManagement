@@ -102,11 +102,8 @@ namespace MyErpManagement.Api.Controllers
         {
             var existingUser = await unitOfWork.UserRepository
                 .GetFirstOrDefaultAsync(u => u.Email == verifyEmailRequestDto.Email);
-            if (existingUser is not null && existingUser.Email == verifyEmailRequestDto.Email)
+            if (existingUser is not null)
             {
-                Console.WriteLine("Email already in use: " + existingUser.Email);
-                Console.WriteLine("Email already in use: " + existingUser.Account);
-                Console.WriteLine("Email already in use: " + existingUser.Id);
                 return Conflict(new ApiResponseDto(HttpStatusCode.Conflict, ResponseTextConstant.Conflict.EmailAlreadyInUse));
             }
             var emailCode = await cachService.GetRegistCodeAsync(verifyEmailRequestDto.Email);

@@ -68,4 +68,5 @@ jobs:
         Seed_User_Some_Permission_Hash: ${{ secrets.SEED_USER_PERMISSION_HASH }}
         JWT_ACCESS_EXPIRATION: ${{ secrets.JWT_ACCESS_EXPIRATION }}
         Test_Email: ${{ secrets.TEST_EMAIL }}
+        Send_Email: false
       run: dotnet test --no-build --verbosity normal  
