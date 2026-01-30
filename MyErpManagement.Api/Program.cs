@@ -24,7 +24,14 @@ try
     var context = services.GetRequiredService<ApplicationDbContext>();
     // 檢查是否有待處理的 Migration，並應用它們
     // 這會創建資料庫和表格，並執行 SeedData 邏輯
-    await context.Database.MigrateAsync();
+    if (context.Database.IsRelational())
+    {
+        await context.Database.MigrateAsync();
+    }
+    else
+    {
+        await context.Database.EnsureCreatedAsync();
+    }
 }
 catch (Exception ex)
 {

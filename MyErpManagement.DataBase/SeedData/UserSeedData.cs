@@ -21,16 +21,16 @@ namespace MyErpManagement.DataBase.SeedData
             {
                 new User
                 {
-                    Id = Guid.Parse(config["Seed_User_All_Permission_Id"] ?? throw new Exception("Seed_User_All_Permission_Id 環境變數是空值")),
-                    Account = config["Seed_User_All_Permission_Account"] ?? throw new Exception("Seed_User_All_Account 環境變數是空值"),
+                    Id = Guid.Parse(config["Seed_User_All_Permission_Id"] ?? "A8723555-5264-468E-96E8-2E5434151B92"),
+                    Account = config["Seed_User_All_Permission_Account"] ?? "admin",
                     PasswordSalt = config["Seed_User_All_Permission_Salt"] ?? throw new Exception("Seed_User_All_Permission_Salt 環境變數是空值"),
                     PasswordHash = config["Seed_User_All_Permission_Hash"] ?? throw new Exception("Seed_User_All_Permission_Hash 環境變數是空值"),
                     IsSuperAdmin = true,
                 },
                 new User
                 {
-                    Id = Guid.Parse(config["Seed_User_Some_Permission_Id"] ?? throw new Exception("Seed_User_Some_Permission_Id 環境變數是空值")),
-                    Account = config["Seed_User_Some_Permission_Account"] ?? throw new Exception("Seed_User_Some_Permission_Account 環境變數是空值"),
+                    Id = Guid.Parse(config["Seed_User_Some_Permission_Id"] ?? "B743B802-1234-4567-8901-ABCDEF123456"),
+                    Account = config["Seed_User_Some_Permission_Account"] ?? "test",
                     PasswordSalt = config["Seed_User_Some_Permission_Salt"] ?? throw new Exception("Seed_User_Some_Permission_Salt 環境變數是空值"),
                     PasswordHash = config["Seed_User_Some_Permission_Hash"] ?? throw new Exception("Seed_User_Some_Permission_Hash 環境變數是空值"),
                     IsSuperAdmin = false,

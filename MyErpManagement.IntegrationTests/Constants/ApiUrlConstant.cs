@@ -5,6 +5,8 @@
         public static class Auth
         {
             public const string Login = "/api/auth/login";
+            public const string Register = "/api/auth/register";
+            public const string VerifyEmail = "/api/auth/verify-email/register";
         }
         public static class Product
         {

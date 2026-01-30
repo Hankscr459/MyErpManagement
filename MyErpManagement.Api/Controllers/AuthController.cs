@@ -19,6 +19,7 @@ using MyErpManagement.Core.Modules.UsersModule.IServices;
 using Swashbuckle.AspNetCore.Filters;
 using System.Net;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Http; // statusCode lint
 
 namespace MyErpManagement.Api.Controllers
 {
