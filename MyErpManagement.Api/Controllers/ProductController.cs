@@ -17,9 +17,12 @@ using MyErpManagement.Core.Modules.UsersModule.Constants;
 using MyErpManagement.DataBase.Helpers;
 using Swashbuckle.AspNetCore.Filters;
 using System.Net;
+using TGolla.Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace MyErpManagement.Api.Controllers
 {
+    [Tags("商品")]
+    [SwaggerControllerOrder(3)]
     public class ProductController(
         IUnitOfWork unitOfWork,
         IMapper mapper

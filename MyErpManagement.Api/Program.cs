@@ -66,9 +66,10 @@ if (app.Environment.IsDevelopment())
         //This Config Higher priority
         c.GenericRapiConfig = new GenericRapiConfig()
         {
-            RenderStyle = "read",
-            Theme = "light",//light | dark
-            SchemaStyle = "table"////tree | table
+            RenderStyle = "focused",
+            Theme = "dark",//light | dark
+            SchemaStyle = "table", ////tree | table
+            ShowMethodInNavBar = "as-colored-block",
         };
     });
 }

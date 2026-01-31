@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MyErpManagement.Api.BackgroundServices;
@@ -27,6 +28,7 @@ using MyErpManagement.DataBase;
 using MyErpManagement.DataBase.Repositories;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
+using TGolla.Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace MyErpManagement.Api.Extensions
 {
@@ -72,6 +74,9 @@ namespace MyErpManagement.Api.Extensions
                 // 必須加上這一行，才會去讀取 [SwaggerResponseExample] 屬性
                 c.ExampleFilters();
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
+                SwaggerControllerOrder<ControllerBase> swaggerControllerOrder = new SwaggerControllerOrder<ControllerBase>(Assembly.GetEntryAssembly());
+                string[] methodsOrder = new string[7] { "get", "post", "put", "patch", "delete", "options", "trace" };
+                c.OrderActionsBy(apiDesc => $"{swaggerControllerOrder.SortKey(apiDesc.ActionDescriptor.RouteValues["controller"])}_{Array.IndexOf(methodsOrder, apiDesc.HttpMethod.ToLower())}");
             });
             services.AddSwaggerExamplesFromAssemblyOf<BadRequestLoginResponseExample>();
             services.AddDbContext<ApplicationDbContext>(options =>
