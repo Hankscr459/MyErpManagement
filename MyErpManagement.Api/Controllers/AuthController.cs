@@ -1,5 +1,6 @@
 ﻿using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http; // statusCode lint
 using Microsoft.AspNetCore.Mvc;
 using MyErpManagement.Api.Constants;
 using MyErpManagement.Api.Examples.Auth;
@@ -19,10 +20,12 @@ using MyErpManagement.Core.Modules.UsersModule.IServices;
 using Swashbuckle.AspNetCore.Filters;
 using System.Net;
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Http; // statusCode lint
+using TGolla.Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace MyErpManagement.Api.Controllers
 {
+    [Tags("認證相關")]
+    [SwaggerControllerOrder(1)]
     public class AuthController(
         IUnitOfWork unitOfWork,
         IJwtService jwtService,
@@ -91,7 +94,12 @@ namespace MyErpManagement.Api.Controllers
             });
         }
 
-        
+        /// <summary>
+        /// 發送Email驗證碼（註冊用）
+        /// </summary>
+        /// <param name="verifyEmailRequestDto"></param>
+        /// <param name="mqService"></param>
+        /// <returns></returns>
         [HttpPost("verify-email/register")]
         [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status400BadRequest)]
@@ -125,6 +133,11 @@ namespace MyErpManagement.Api.Controllers
             });
         }
 
+        /// <summary>
+        /// 註冊
+        /// </summary>
+        /// <param name="registerRequestDto"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponseDto), StatusCodes.Status400BadRequest)]

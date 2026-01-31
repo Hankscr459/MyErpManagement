@@ -13,9 +13,12 @@ using MyErpManagement.Core.Modules.CustomerModule.Entities;
 using MyErpManagement.Core.Modules.UsersModule.Constants;
 using MyErpManagement.DataBase.Helpers;
 using System.Net;
+using TGolla.Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace MyErpManagement.Api.Controllers
 {
+    [Tags("客戶")]
+    [SwaggerControllerOrder(2)]
     public class CustomerController(
         IUnitOfWork unitOfWork,
         IMapper mapper
