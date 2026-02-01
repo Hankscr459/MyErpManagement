@@ -47,6 +47,7 @@ namespace MyErpManagement.Api.Extensions
                     // 當 ModelState 無效時，執行此處理邏輯
                     opt.InvalidModelStateResponseFactory = ValidationResultHelper.HandleInvalidModelState;
                 });
+            services.AddRouting(options => options.LowercaseUrls = true );
             services.AddSwaggerGen(c =>
             {
                 // 1. 取得 Api 專案自身的 XML (包含 Controller 的註解)
