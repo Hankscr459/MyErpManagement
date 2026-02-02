@@ -12,23 +12,14 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      # 1. SQL Server 服務
-      sqlserver:
-        image: mcr.microsoft.com/mssql/server:2022-latest
-        env:
-          ACCEPT_EULA: Y
-          MSSQL_SA_PASSWORD: ${{ secrets.SQL_PASSWORD }} # 測試環境建議使用強密碼
-          MSSQL_PID: Developer
-        ports:
-          - 1433:1433
 
-      # 2. Redis 服務
+      # 1. Redis 服務
       redis:
         image: redis:latest
         ports:
           - 6379:6379
 
-      # 3. RabbitMQ 服務
+      # 2. RabbitMQ 服務
       rabbitmq:
         image: rabbitmq:3-management
         ports:
@@ -69,4 +60,5 @@ jobs:
         JWT_ACCESS_EXPIRATION: ${{ secrets.JWT_ACCESS_EXPIRATION }}
         Test_Email: ${{ secrets.TEST_EMAIL }}
         Send_Email: false
+        Postgres_Sql_Connection_String: ${{ secrets.POSTGRES_SQL_CONNECTION_STRING }}
       run: dotnet test --no-build --verbosity normal  

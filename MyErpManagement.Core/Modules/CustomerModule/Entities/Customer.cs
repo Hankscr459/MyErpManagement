@@ -33,12 +33,12 @@ namespace MyErpManagement.Core.Modules.CustomerModule.Entities
         /// <summary>
         /// 建立日期
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// 修改日期
         /// </summary>
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
 
         /// <summary>
         /// 備註

@@ -11,7 +11,7 @@ namespace MyErpManagement.DataBase.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(p => p.Id)
-                   .HasDefaultValueSql("NEWSEQUENTIALID()");
+                   .HasDefaultValueSql("gen_random_uuid()");
 
             builder.Property(p => p.Name)
                    .IsRequired()
@@ -22,10 +22,10 @@ namespace MyErpManagement.DataBase.Configurations
                    .HasMaxLength(50);
 
             builder.Property(p => p.CreatedAt)
-                   .HasDefaultValueSql("GETUTCDATE()");
+                   .HasDefaultValueSql("now()");
 
             builder.Property(p => p.UpdatedAt)
-                   .HasDefaultValueSql("GETUTCDATE()");
+                   .HasDefaultValueSql("now()");
 
             builder.Property(p => p.Balance)
                    .HasPrecision(18, 2); // 建議設定金額精度

@@ -43,7 +43,7 @@ namespace MyErpManagement.Core.Modules.ProductsModule.Entities
         /// <summary>
         /// 建立日期
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         // --- 新增導覽屬性 ---
         /// <summary>

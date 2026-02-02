@@ -23,14 +23,14 @@ namespace MyErpManagement.DataBase.Configurations
             // 它是給「未來」用的： 這行程式碼是在告訴 SQL Server：「以後如果有新的資料存進來，但程式碼沒給 Id 時，請你自動幫我產生一個循序的 Guid」。
             // 它是資料庫層級的規則： 只有當資料真正進到 SQL Server 儲存的那一刻，這個功能才會啟動。
             builder.Property(x => x.Id)
-                    .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    .HasDefaultValueSql("gen_random_uuid()");
 
             builder.HasIndex(x => x.Account).IsUnique();
 
             builder.HasIndex(x => x.Email).IsUnique();
 
             builder.Property(p => p.CreatedAt)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql("now()");
 
             // provider 提供的 Users 列表
             builder.HasData(_userSeedData.Users);

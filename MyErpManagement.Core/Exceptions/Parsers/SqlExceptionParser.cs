@@ -1,8 +1,7 @@
-﻿using Microsoft.Data.SqlClient;
-using MyErpManagement.Core.Dtos.Shared;
+﻿using MyErpManagement.Core.Dtos.Shared;
 using MyErpManagement.Core.Exceptions.IParsers;
+using Npgsql;
 using System.Net;
-using System.Text.RegularExpressions;
 
 namespace MyErpManagement.Core.Exceptions.Parsers
 {
@@ -10,33 +9,40 @@ namespace MyErpManagement.Core.Exceptions.Parsers
     {
         public ApiResponseDto? Parser(Exception ex)
         {
-            if (ex.InnerException is not SqlException sqlEx)
+            if (ex.InnerException is not PostgresException pgEx)
                 return null;
 
-            var message = sqlEx.Number switch
+            var message = pgEx.SqlState switch
             {
-                2627 => "資料重複：主鍵衝突。",
-                2601 => "資料重複：唯一索引限制。",
-                547 => "資料關聯錯誤：此資料正被其他項目引用。",
-                _ => $"資料庫執行錯誤 (Code: {sqlEx.Number})"
+                PostgresErrorCodes.UniqueViolation =>
+                    "資料重複：唯一限制衝突。",
+
+                PostgresErrorCodes.ForeignKeyViolation =>
+                    "資料關聯錯誤：此資料正被其他項目引用。",
+
+                _ =>
+                    $"資料庫執行錯誤 (Code: {pgEx.SqlState})"
             };
 
-            // 解析重複值的詳細資訊
-            if (sqlEx.Number == 2601 || sqlEx.Number == 2627)
+            // Unique / PK 重複（23505）
+            if (pgEx.SqlState == PostgresErrorCodes.UniqueViolation)
             {
-                var match = Regex.Match(sqlEx.Message, @"index '(?<index>.*?)'.*value is \((?<value>.*)\)");
-                if (match.Success)
-                {
-                    var indexName = match.Groups["index"].Value;
-                    var fieldName = indexName.Split('_').Last();
-                    return new ApiResponseDto(HttpStatusCode.Conflict, message, new Dictionary<string, string[]>
-                {
-                    { fieldName, [$"值 '{match.Groups["value"].Value}' 已存在"] }
-                });
-                }
+                var fieldName = pgEx.ConstraintName?.Split('_').Last() ?? "unknown";
+
+                return new ApiResponseDto(
+                    HttpStatusCode.Conflict,
+                    message,
+                    new Dictionary<string, string[]>
+                    {
+                        { fieldName, [$"值已存在"] }
+                    });
             }
 
-            return new ApiResponseDto(HttpStatusCode.BadRequest, message, sqlEx.Message);
+            return new ApiResponseDto(
+                HttpStatusCode.BadRequest,
+                message,
+                pgEx.MessageText
+            );
         }
     }
 }

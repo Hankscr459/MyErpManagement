@@ -26,7 +26,7 @@ namespace MyErpManagement.Core.Modules.ProductsModule.Entities
         /// <summary>
         /// 建立日期
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// 建立人

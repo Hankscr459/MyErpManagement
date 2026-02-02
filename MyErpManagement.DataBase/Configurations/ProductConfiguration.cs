@@ -14,9 +14,9 @@ namespace MyErpManagement.DataBase.Configurations
         {
             builder.HasIndex(p => p.ProductCategoryId).HasDatabaseName("IX_products_productCategoryId");
             builder.Property(p => p.Id)
-                    .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    .HasDefaultValueSql("gen_random_uuid()");
             builder.Property(p => p.CreatedAt)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql("now()");
             // 配置索引
             builder.HasIndex(p => p.Code).IsUnique();
             builder.HasIndex(p => p.Specification).IsUnique();

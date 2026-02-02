@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MyErpManagement.Core.Enums;
 using MyErpManagement.Core.Modules.ProductsModule.Entities;
 using MyErpManagement.Core.Modules.ProductsModule.Enums;
@@ -21,21 +20,24 @@ namespace MyErpManagement.DataBase.Repositories
             ProductListQueryModel productListQuery,
             Expression<Func<Product, TResult>> selector)
         {
-            // 解決方法：先取得符合條件的 ID 列表，這讓後續 query 變回簡單的 LINQ
-            var paramValue = (object?)productListQuery.CategroyId ?? DBNull.Value;
-            var sqlParam = new SqlParameter("@ParentId", paramValue);
+            List<Guid> categoryIds = new List<Guid>();
+            if (productListQuery.CategroyId is not null)
+            {
+                var sql = @"
+                WITH RECURSIVE CategoryTree AS (
+                    SELECT ""Id"" FROM ""ProductCategories"" 
+                    WHERE ""Id"" = @p0
+                    UNION ALL
+                    SELECT t.""Id"" FROM ""ProductCategories"" t
+                    INNER JOIN CategoryTree ct ON t.""ParentId"" = ct.""Id""
+                )
+                SELECT ""Id"" FROM CategoryTree";
 
-            // 這裡只查 ID，繞過 EF 對實體查詢的包裝限制
-            var categoryIds = await _db.Database
-                .SqlQueryRaw<Guid>(@"
-            WITH CategoryTree AS (
-                SELECT id FROM ProductCategories WHERE id = @ParentId
-                UNION ALL
-                SELECT t.id FROM ProductCategories t
-                INNER JOIN CategoryTree ct ON t.parentId = ct.id
-            )
-            SELECT id FROM CategoryTree", sqlParam)
-                .ToListAsync();
+                // 這裡只查 ID，繞過 EF 對實體查詢的包裝限制
+                categoryIds = await _db.Database
+                    .SqlQueryRaw<Guid>(sql, new Guid(productListQuery.CategroyId))
+                    .ToListAsync();
+            }
 
             var query = _db.Products
                 .AsNoTracking()

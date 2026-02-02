@@ -11,17 +11,17 @@ namespace MyErpManagement.DataBase.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(p => p.Id)
-                   .HasDefaultValueSql("NEWSEQUENTIALID()");
+                   .HasDefaultValueSql("gen_random_uuid()");
 
             builder.Property(p => p.Name)
                    .IsRequired()
                    .HasMaxLength(50);
 
             builder.Property(p => p.CreateAt)
-                   .HasDefaultValueSql("GETUTCDATE()");
+                   .HasDefaultValueSql("now()");
 
             builder.Property(p => p.UpdateAt)
-                   .HasDefaultValueSql("GETUTCDATE()");
+                   .HasDefaultValueSql("now()");
 
             // 設定與中間表的關係
             builder.HasMany(t => t.CustomerTagRelations)

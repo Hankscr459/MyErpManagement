@@ -16,8 +16,8 @@ namespace MyErpManagement.Core.Modules.JwtModule.Entities
         // 強制登出的關鍵：紀錄該 Token 是否已被廢棄
         public bool IsRevoked { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-        public DateTime ExpiresAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ExpiresAt { get; set; }
 
         // 追蹤來源 (推薦加入)
         public string? RemoteIpAddress { get; set; }

@@ -11,7 +11,7 @@
         public string? ApiPath { get; set; } // 對應的 API 路徑或標記
 
         public bool IsActive { get; set; } = true;
-        public DateTime LastSeenAt { get; set; }
+        public DateTimeOffset LastSeenAt { get; set; }
 
         // 必須加入此屬性，才能與中間表關聯
         public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();

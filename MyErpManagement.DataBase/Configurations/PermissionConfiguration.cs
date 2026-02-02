@@ -9,7 +9,7 @@ namespace MyErpManagement.DataBase.Configurations
         public void Configure(EntityTypeBuilder<Permission> builder)
         {
             builder.Property(p => p.Id)
-                    .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    .HasDefaultValueSql("gen_random_uuid()");
 
             // 設定 IsActive 預設為 true (1)
             builder.Property(p => p.IsActive)
@@ -17,7 +17,7 @@ namespace MyErpManagement.DataBase.Configurations
 
             // 設定 LastSeenAt 預設為 SQL Server 的 UTC 時間
             builder.Property(p => p.LastSeenAt)
-                    .HasDefaultValueSql("GETUTCDATE()");
+                    .HasDefaultValueSql("now()");
         }
     }
 }

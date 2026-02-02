@@ -10,7 +10,7 @@ namespace MyErpManagement.DataBase.Configurations
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
-                    .HasDefaultValueSql("NEWSEQUENTIALID()");
+                    .HasDefaultValueSql("gen_random_uuid()");
             // 設定與 User 的關係 (非強關聯亦可，視需求而定)
             builder.HasIndex(x => x.UserId);
             builder.Property(x => x.TokenValue).IsRequired();

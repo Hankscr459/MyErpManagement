@@ -81,7 +81,7 @@ namespace MyErpManagement.Api.Extensions
             });
             services.AddSwaggerExamplesFromAssemblyOf<BadRequestLoginResponseExample>();
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(config["Sql_Server_Connection_String"]));
+                options.UseNpgsql(config["Postgres_Sql_Connection_String"]));
             services.AddStackExchangeRedisCache(options =>
             {
                 // 從設定檔讀取連接字串

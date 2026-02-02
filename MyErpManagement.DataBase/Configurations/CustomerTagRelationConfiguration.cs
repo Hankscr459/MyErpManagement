@@ -13,7 +13,7 @@ namespace MyErpManagement.DataBase.Configurations
 
             // 2. 設定關係（通常在實體端設定過，這裡可重複確認或設定額外欄位）
             builder.Property(ctr => ctr.AssignedAt)
-                   .HasDefaultValueSql("GETUTCDATE()");
+                   .HasDefaultValueSql("now()");
         }
     }
 }

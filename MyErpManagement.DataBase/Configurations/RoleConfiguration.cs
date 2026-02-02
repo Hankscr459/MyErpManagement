@@ -17,7 +17,7 @@ namespace MyErpManagement.DataBase.Configurations
         {
             // 設定 Role 與 Permission 的預設值或索引(可視需求移至獨立的 Configuration 類別)
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(x => x.Id).HasDefaultValueSql("gen_random_uuid()");
 
             
             builder.HasData(_roleSeedData.Role);

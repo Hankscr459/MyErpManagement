@@ -1,6 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
@@ -46,11 +44,6 @@ namespace MyErpManagement.DataBase.Repositories
         public bool HasChanges()
         {
             return db.ChangeTracker.HasChanges();
-        }
-
-        public int ExecuteSqlCommand(string sql, params SqlParameter[] sqlParameters)
-        {
-            return db.Database.ExecuteSqlRaw(sql, sqlParameters);
         }
 
         #region Transcation

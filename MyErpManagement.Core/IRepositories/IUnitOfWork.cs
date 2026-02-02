@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
+﻿using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
@@ -15,7 +14,6 @@ namespace MyErpManagement.Core.IRepositories
         IProductRepository ProductRepository { get; }
         ICustomerRepository CustomerRepository { get; }
         ICustomerTagRepository CustomerTagRepository { get; }
-        int ExecuteSqlCommand(string sql, params SqlParameter[] sqlParameters);
 
         public void Save();
         public Task<bool> Complete();

@@ -7,9 +7,9 @@
 
         public string Name { get; set; } = default!;
 
-        public DateTime CreateAt { get; set; }
+        public DateTimeOffset CreateAt { get; set; }
 
-        public DateTime UpdateAt { get; set; }
+        public DateTimeOffset UpdateAt { get; set; }
 
         public Guid CreatedBy { get; set; }
 
