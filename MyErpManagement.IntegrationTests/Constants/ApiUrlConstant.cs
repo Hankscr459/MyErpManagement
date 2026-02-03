@@ -12,5 +12,10 @@
         {
             public const string ProductCRUD = "/api/product";
         }
+
+        public static class Customer
+        {
+            public const string CustomerCRUD = "/api/customer";
+        }
     }
 }
