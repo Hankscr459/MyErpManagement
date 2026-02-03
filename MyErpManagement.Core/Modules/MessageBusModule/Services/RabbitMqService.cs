@@ -14,10 +14,7 @@ namespace MyErpManagement.Core.Modules.MessageBusModule.Services
         {
             var factory = new ConnectionFactory
             {
-                HostName = config["Rabbit_MQ_Host"] ?? "",
-                Port = int.Parse(config["Rabbit_MQ_Port"] ?? ""),
-                UserName = config["Rabbit_MQ_UserName"] ?? "",
-                Password = config["Rabbit_MQ_Password"] ?? ""
+                Uri = new Uri(config["RabbitMQ_URI"]!)
             };
             using var connection = await factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();

@@ -13,7 +13,7 @@ namespace MyErpManagement.Api.BackgroundServices
         private readonly IConnectionFactory _factory;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<EmailConsumerWorker> _logger;
-        private readonly int _maxRetryCount;
+
         public EmailConsumerWorker(
             IConfiguration config,
             IServiceScopeFactory scopeFactory,
@@ -21,14 +21,10 @@ namespace MyErpManagement.Api.BackgroundServices
         {
             _factory = new ConnectionFactory
             {
-                HostName = config["Rabbit_MQ_Host"] ?? "",
-                Port = int.Parse(config["Rabbit_MQ_Port"] ?? ""),
-                UserName = config["Rabbit_MQ_UserName"] ?? "",
-                Password = config["Rabbit_MQ_Password"] ?? ""
+                Uri = new Uri(config["RabbitMQ_URI"]!)
             };
             _scopeFactory = scopeFactory;
             _logger = logger;
-            _maxRetryCount = config.GetValue<int>("Rabbit_MQ_Regist_Email_Max_Retry_Count", 3);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
