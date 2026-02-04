@@ -21,7 +21,7 @@ namespace MyErpManagement.DataBase
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Product> Products{ get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Customer> CustomerTags { get; set; }
+        public DbSet<CustomerTag> CustomerTags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
