@@ -5,5 +5,7 @@
         public const string Name = "Test Customer";
         public const string Code = "TC001";
         public const string Notes = "This is a test customer.";
+        public const string Address = "123 Test St, Test City";
+        public const string Phone = "0988689053";
     }
 }

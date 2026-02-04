@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
@@ -50,6 +51,10 @@ namespace MyErpManagement.DataBase.Repositories
 
         public async Task BeginTransactionAsync()
         {
+            if (db.Database.IsInMemory())
+            {
+                return;
+            }
             _currentTransaction = await db.Database.BeginTransactionAsync();
         }
 
