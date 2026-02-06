@@ -28,6 +28,8 @@ namespace MyErpManagement.DataBase.Configurations
                .WithMany(x => x.Children)
                .HasForeignKey(x => x.ParentId)
                .OnDelete(DeleteBehavior.Restrict); // 避免循環刪除錯誤
+
+            builder.HasIndex(pc => pc.Name).IsUnique();
         }
     }
 }

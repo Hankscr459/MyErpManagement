@@ -28,6 +28,8 @@ namespace MyErpManagement.DataBase.Configurations
                    .WithOne(ctr => ctr.CustomerTag)
                    .HasForeignKey(ctr => ctr.CusomterTagId)
                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(ct => ct.Name).IsUnique();
         }
     }
 }
