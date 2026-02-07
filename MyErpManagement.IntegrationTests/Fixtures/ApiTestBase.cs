@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using MyErpManagement.Core.Dtos.Auth.Request;
 using MyErpManagement.Core.Dtos.Auth.Response;
 using MyErpManagement.Core.Modules.CustomerModule.Entities;
@@ -19,6 +20,12 @@ namespace MyErpManagement.IntegrationTests.Fixtures
         {
             Factory = factory;
             Client = factory.CreateClient();
+        }
+
+        protected ApplicationDbContext CreateDbContext()
+        { 
+            var scope = Factory.Services.CreateScope();
+            return scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         }
 
         // 封裝登入邏輯，供子類別呼叫
@@ -45,20 +52,40 @@ namespace MyErpManagement.IntegrationTests.Fixtures
 
         protected async Task CustomerTagCheckAsync()
         {
-            using var scope = Factory.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var customerTag = db.CustomerTags.FirstOrDefault(ct => ct.Name == CustomerConstant.Name);
-            if (customerTag == null)
+            var db = this.CreateDbContext();
+            if (await db.CustomerTags.AnyAsync(u => u.Id == Guid.Parse(CustomerTagConstant.Id)))
             {
-                var userId = Guid.Parse(UserConstant.Id);
-                db.CustomerTags.Add(new CustomerTag
-                {
-                    Id = Guid.Parse(CustomerTagConstant.Id),
-                    Name = CustomerTagConstant.Name,
-                    CreatedBy = userId,
-                });
-                await db.SaveChangesAsync();
+                return;
             }
+
+            var userId = Guid.Parse(UserConstant.Id);
+            db.CustomerTags.Add(new CustomerTag
+            {
+                Id = Guid.Parse(CustomerTagConstant.Id),
+                Name = CustomerTagConstant.Name,
+                CreatedBy = userId,
+            });
+            await db.SaveChangesAsync();
+        }
+
+        protected async Task CustomerCheckAsync()
+        {
+            var db = this.CreateDbContext();
+            if (await db.Customers.AnyAsync(u => u.Id == Guid.Parse(CustomerConstant.Id)))
+            {
+                return;
+            }
+            var userId = Guid.Parse(UserConstant.Id);
+            db.Customers.Add(new Customer
+            {
+                Id = Guid.Parse(CustomerConstant.Id),
+                Name = CustomerConstant.Name,
+                Phone = CustomerConstant.Phone,
+                Address = CustomerConstant.Address,
+                Code = CustomerConstant.Code,
+                Notes = CustomerConstant.Notes,
+            });
+            await db.SaveChangesAsync();
         }
     }
 }

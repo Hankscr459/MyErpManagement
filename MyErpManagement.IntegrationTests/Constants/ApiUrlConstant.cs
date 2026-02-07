@@ -17,5 +17,11 @@
         {
             public const string CustomerCRUD = "/api/customer";
         }
+
+        public static class CustomerTag
+        {
+            public const string CustomerTags = "/api/customer/customerTags";
+            public const string CustomerTagCRU = "/api/customer/customerTag";
+        }
     }
 }
