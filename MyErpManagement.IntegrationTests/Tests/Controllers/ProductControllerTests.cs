@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MyErpManagement.Api.Constants;
 using MyErpManagement.Core.Dtos.Products.Request;
 using MyErpManagement.Core.Dtos.Shared;
-using MyErpManagement.DataBase;
 using MyErpManagement.IntegrationTests.Constants;
 using MyErpManagement.IntegrationTests.Fixtures;
 using System.Net;
@@ -13,12 +12,14 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
 {
     public class ProductControllerTests : ApiTestBase
     {
-        private readonly ApiWebApplicationFactory _factory;
         public ProductControllerTests(ApiWebApplicationFactory factory) : base(factory)
         {
-            _factory = factory;
         }
 
+        /// <summary>
+        /// 新增商品 status: 204
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task CreateProduct_ShouldReturn204Created()
         {
@@ -36,9 +37,17 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             });
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-            using var scope = _factory.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            db.Products.FirstOrDefault(j => j.Code == ProductConstant.Code).Should().NotBeNull();
+            var db = CreateDbContext();
+            var product = db.Products.FirstOrDefault(j => j.Code == ProductConstant.Code);
+            if (product is null)
+            {
+                throw new Exception("新增商品後，從資料庫查詢不到該商品");
+            }
+            product.Name.Should().Be(ProductConstant.Name);
+            product.Specification.Should().Be(ProductConstant.Specification);
+            product.Code.Should().Be(ProductConstant.Code);
+            product.PurchasePrice.Should().Be(ProductConstant.PurchasePrice);
+            product.SalesPrice.Should().Be(ProductConstant.SalesPrice);
         }
 
         [Fact]
