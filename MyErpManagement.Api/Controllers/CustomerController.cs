@@ -153,11 +153,15 @@ namespace MyErpManagement.Api.Controllers
         /// <returns></returns>
         [HttpDelete]
         [HasPermission(PermissionKeysConstant.Customer.DeleteManyCustomers.Key)]
-        public ActionResult DeleteManyCustomer(DeleteManyCustomersRequestDto deleteManyCustomersRequestDto)
+        public async Task<ActionResult> DeleteManyCustomer(DeleteManyCustomersRequestDto deleteManyCustomersRequestDto)
         {
             if (deleteManyCustomersRequestDto is null || !deleteManyCustomersRequestDto.Any()) return BadRequest("請提供要刪除的 ID 列表");
 
             unitOfWork.CustomerRepository.RemoveByIdList(deleteManyCustomersRequestDto);
+            if (!await unitOfWork.Complete())
+            {
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToDeleteCustomer));
+            }
             return NoContent();
         }
 

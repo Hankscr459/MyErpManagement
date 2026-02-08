@@ -120,9 +120,11 @@ namespace MyErpManagement.DataBase.Repositories
 
         public void RemoveByIdList(IEnumerable<Guid> ids)
         {
-            // ExecuteDelete 會立即對資料庫下指令，它不經過 SaveChanges()。
-            dbSet.Where(e => ids.Contains(EF.Property<Guid>(e, "Id")))
-                 .ExecuteDelete();
+            var entitiesToRemove = dbSet
+            .Where(e => ids.Contains(EF.Property<Guid>(e, "Id")))
+            .ToList(); // 先載入實體
+
+                dbSet.RemoveRange(entitiesToRemove);
         }
 
         #endregion
