@@ -11,6 +11,11 @@ namespace MyErpManagement.IntegrationTests.SeedData
 {
     public static class TestUserSeed
     {
+        /// <summary>
+        /// 新增預設使用者
+        /// </summary>
+        /// <param name="factory"></param>
+        /// <returns></returns>
         public static async Task Initialize(ApiWebApplicationFactory factory)
         {
             var userId = new Guid(UserConstant.Id);

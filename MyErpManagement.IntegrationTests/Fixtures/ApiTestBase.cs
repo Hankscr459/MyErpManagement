@@ -28,7 +28,11 @@ namespace MyErpManagement.IntegrationTests.Fixtures
             return scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         }
 
-        // 封裝登入邏輯，供子類別呼叫
+        /// <summary>
+        /// 給測試API帶入Header Token
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         protected async Task AuthenticateAsync()
         {
             await TestUserSeed.Initialize(Factory);
@@ -50,6 +54,10 @@ namespace MyErpManagement.IntegrationTests.Fixtures
                 new AuthenticationHeaderValue("Bearer", result.Token);
         }
 
+        /// <summary>
+        /// 如果沒有客戶標籤就新增預設客戶標籤
+        /// </summary>
+        /// <returns></returns>
         protected async Task CustomerTagCheckAsync()
         {
             var db = this.CreateDbContext();
@@ -68,6 +76,10 @@ namespace MyErpManagement.IntegrationTests.Fixtures
             await db.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// 如果沒有客戶就新增預設客戶
+        /// </summary>
+        /// <returns></returns>
         protected async Task CustomerCheckAsync()
         {
             var db = this.CreateDbContext();

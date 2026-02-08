@@ -20,6 +20,10 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             _factory = factory;
         }
 
+        /// <summary>
+        /// 新增客戶標籤，並確認資料庫的資料是否正確 status: 204
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task CreateCustomerTag_ShouldReturn204()
         {
@@ -35,6 +39,11 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             customer.Should().NotBeNull();
         }
 
+        /// <summary>
+        /// 查看客戶標籤資料 status: 200
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task ReadCustomerTag_ShouldReturn200()
         {
@@ -51,6 +60,11 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             result.Name.Should().NotBeNull();
         }
 
+        /// <summary>
+        /// 查無客戶標籤 status: 404
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task ReadCustomerTag_ShouldReturn404()
         {
@@ -66,6 +80,11 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             result.Message.Should().Be(ResponseTextConstant.NotFound.CustomerTag);
         }
 
+        /// <summary>
+        /// 查看客戶標籤清單 status: 200
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task ReadCustomerTags_ShouldReturn200()
         {
@@ -78,9 +97,15 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             {
                 throw new Exception("ReadCustomerTags result is null");
             }
+            // 確認回傳的資料包含剛剛新增的客戶標籤
             result.Should().Contain(c => c.Id == Guid.Parse(CustomerTagConstant.Id));
         }
 
+        /// <summary>
+        /// 修改客戶標籤 status: 204
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task UpdateCustomerTag_ShouldReturn204()
         {
@@ -99,10 +124,14 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             {
                 throw new Exception("UpdateCustomerTag not found");
             }
-
+            // 確認名稱欄位更新
             updateCustomerTag.Name.Should().Be(CustomerTagConstant.UpdateName);
         }
 
+        /// <summary>
+        /// 新增客戶，並確認資料庫的資料是否正確 status: 204
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task CreateCustomer_ShouldReturn204Created()
         {
@@ -126,6 +155,7 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             customer.Should().NotBeNull();
             if (customer != null)
             {
+                // 確認每個欄位都有存進去
                 customer.Name.Should().Be(CustomerConstant.CreateName);
                 customer.Code.Should().Be(CustomerConstant.CreateCode);
                 customer.Notes.Should().Be(CustomerConstant.CreateNotes);
@@ -137,6 +167,11 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             }
         }
 
+        /// <summary>
+        /// 查看客戶資料 status: 200
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task ReadCustomer_ShouldReturn200()
         {
@@ -149,6 +184,7 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             {
                 throw new Exception("ReadCustomer result is null");
             }
+            // 確認每個欄位都有拿到預期的值
             result.Id.Should().Be(CustomerConstant.Id);
             result.Code.Should().Be(CustomerConstant.Code);
             result.Address.Should().Be(CustomerConstant.Address);
@@ -158,6 +194,11 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             result.CustomerTagRelations.Should().HaveCount(0);
         }
 
+        /// <summary>
+        /// 查無客戶測試 status: 404
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task ReadCustomer_ShouldReturn404()
         {
@@ -173,6 +214,11 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             result.Message.Should().Be(ResponseTextConstant.NotFound.Customer);
         }
 
+        /// <summary>
+        /// 客戶分頁清單 sttatus: 200
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task ReadCustomers_ShouldReturn200()
         {
@@ -185,11 +231,17 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             {
                 throw new Exception("ReadCustomers result is null");
             }
+            // 確認回傳的分頁資料
             result.Docs.Should().Contain(c => c.Id == Guid.Parse(CustomerConstant.Id));
             result.Page.Should().Be(1);
             result.Limit.Should().Be(10);
         }
 
+        /// <summary>
+        /// 修改客戶資料，並確認資料庫的資料是否正確 status: 200
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task UpdateCustomers_ShouldReturn200()
         {
@@ -212,6 +264,7 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             {
                 throw new Exception("UpdateCustomer not found");
             }
+            // 確認每個欄位是否更新
             customer.Id.Should().Be(Guid.Parse(CustomerConstant.Id));
             customer.Name.Should().Be(CustomerTagConstant.UpdateName);
             customer.Code.Should().Be(CustomerConstant.UpdateCode);
