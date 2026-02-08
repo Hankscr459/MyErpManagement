@@ -1,11 +1,9 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using MyErpManagement.Api.Constants;
 using MyErpManagement.Core.Dtos.Auth.Request;
 using MyErpManagement.Core.Dtos.Auth.Response;
 using MyErpManagement.Core.Dtos.Shared;
-using MyErpManagement.DataBase;
 using MyErpManagement.IntegrationTests.Constants;
 using MyErpManagement.IntegrationTests.Fixtures;
 using MyErpManagement.IntegrationTests.SeedData;
@@ -14,13 +12,13 @@ using System.Net.Http.Json;
 
 namespace MyErpManagement.IntegrationTests.Tests.Controllers
 {
-    public class AuthControllerTests : IClassFixture<ApiWebApplicationFactory>
+    public class AuthControllerTests : ApiTestBase
     {
         private readonly HttpClient _client;
         private readonly ApiWebApplicationFactory _factory;
         protected IConfiguration _config { get; }
 
-        public AuthControllerTests(ApiWebApplicationFactory factory)
+        public AuthControllerTests(ApiWebApplicationFactory factory) : base(factory)
         {
             _client = factory.CreateClient();
             _factory = factory;
@@ -34,6 +32,11 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
                 .Build();
         }
 
+        /// <summary>
+        /// 登入 status: 200
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task Login_WithCorrectCredentials_ShouldReturn200AndToken()
         {
@@ -62,11 +65,15 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             }
 
             // 檢查Token是否存入Db Memory
-            using var scope = _factory.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var db = CreateDbContext();
             db.JwtRecords.FirstOrDefault(j => j.TokenValue == result.Token).Should().NotBeNull();
         }
 
+        /// <summary>
+        /// 登入密碼輸入錯誤 status: 400
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task Login_WithWrongPassword_ShouldReturn400BadRequest()
         {
@@ -84,6 +91,11 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             result.Message.Should().Be(ResponseTextConstant.BadRequest.InvalidPassword);
         }
 
+        /// <summary>
+        /// 登入帳號錯誤 status: 400
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task Login_WithWrongAccount_ShouldReturn400BadRequest()
         {
@@ -101,6 +113,11 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             result.Message.Should().Be(ResponseTextConstant.BadRequest.InvalidAccount);
         }
 
+        /// <summary>
+        /// 註冊發送Email驗證碼 status: 200
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         [Fact]
         public async Task VerifyRegistEmail_Ok()
         {
