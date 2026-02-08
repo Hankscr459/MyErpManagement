@@ -30,7 +30,8 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             // 呼叫基底類別的方法，自動幫 Client 加上 Header
             await AuthenticateAsync();
             var response = await Client.PostAsJsonAsync(ApiUrlConstant.CustomerTag.CustomerTagCRU, new
-            CreateCustomerTagRequestDto {
+            CreateCustomerTagRequestDto
+            {
                 Name = CustomerTagConstant.CreateName,
             });
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -111,7 +112,7 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
         {
             await AuthenticateAsync();
             await CustomerTagCheckAsync();
-            
+
             var response = await Client.PutAsJsonAsync(ApiUrlConstant.CustomerTag.CustomerTagCRU + "/" + CustomerTagConstant.Id, new
             UpdateCustomerRequestTagDto
             {
@@ -272,6 +273,70 @@ namespace MyErpManagement.IntegrationTests.Tests.Controllers
             customer.Address.Should().Be(CustomerConstant.UpdateAddress);
             customer.Phone.Should().Be(CustomerConstant.UpdatePhone);
             customer.CustomerTagRelations.Should().Contain(c => c.CusomterTagId == Guid.Parse(CustomerTagConstant.Id));
+        }
+
+        /// <summary>
+        /// 移除客戶單筆 status: 204
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task DeleteCustomer_ShouldReturn204()
+        {
+            await AuthenticateAsync();
+            await CustomerCheckAsync();
+            var response = await Client.DeleteAsync(ApiUrlConstant.Customer.CustomerCRUD + "/" + CustomerConstant.Id);
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            var db = CreateDbContext();
+            var customer = await db.Customers.FirstOrDefaultAsync(c => c.Id == Guid.Parse(CustomerConstant.Id));
+            customer.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task DeleteCustomers_shouldReturn204()
+        {
+            await AuthenticateAsync();
+            var db = CreateDbContext();
+
+            db.Customers.AddRange(new List<Customer>()
+            {
+                new Customer
+                {
+                    Id = Guid.Parse(CustomerConstant.DeleteId),
+                    Name = CustomerConstant.DeleteName,
+                    Code = CustomerConstant.DeleteCode,
+                    Notes = CustomerConstant.DeleteNotes,
+                    Address = CustomerConstant.DeleteAddress,
+                    Phone = CustomerConstant.DeletePhone,
+                },
+                new Customer
+                {
+                    Id = Guid.Parse(CustomerConstant.Delete2Id),
+                    Name = CustomerConstant.Delete2Name,
+                    Code = CustomerConstant.Delete2Code,
+                    Notes = CustomerConstant.Delete2Notes,
+                    Address = CustomerConstant.Delete2Address,
+                    Phone = CustomerConstant.Delete2Phone,
+                }
+            });
+            await db.SaveChangesAsync();
+            DeleteManyCustomersRequestDto list = new DeleteManyCustomersRequestDto
+            {
+                Guid.Parse(CustomerConstant.DeleteId),
+                Guid.Parse(CustomerConstant.Delete2Id)
+            };
+            var request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                ApiUrlConstant.Customer.CustomerCRUD
+            )
+            {
+                Content = JsonContent.Create(list)
+            };
+            var response = await Client.SendAsync(request);
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            var deleteCustomer = await db.Customers.FirstOrDefaultAsync(c => c.Id == Guid.Parse(CustomerConstant.DeleteId));
+            deleteCustomer.Should().BeNull();
+            var customer = await db.Customers.FirstOrDefaultAsync(c => c.Id == Guid.Parse(CustomerConstant.Delete2Id));
+            customer.Should().BeNull();
         }
     }
 }

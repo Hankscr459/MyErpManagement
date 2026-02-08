@@ -20,5 +20,19 @@
         public const string UpdateNotes = "This is a test customer_Update.";
         public const string UpdateAddress = "123 Test St, Test City_Update";
         public const string UpdatePhone = "0988639012";
+
+        public const string DeleteId = "d1a184e2-3c49-f152-816a-1a84a10f6e23";
+        public const string DeleteName = "Test Customer_Delete";
+        public const string DeleteCode = "TC001_Delete";
+        public const string DeleteNotes = "This is a test customer_Delete.";
+        public const string DeleteAddress = "121 Test St, Test City_Delete";
+        public const string DeletePhone = "0918633062";
+
+        public const string Delete2Id = "f1a184e2-3c49-f152-816a-1a84a10f6e21";
+        public const string Delete2Name = "Test Customer_Delete2";
+        public const string Delete2Code = "TC001_Delete2";
+        public const string Delete2Notes = "This is a test customer_Delete2.";
+        public const string Delete2Address = "121 Test St, Test City_Delete2";
+        public const string Delete2Phone = "0918633013";
     }
 }
