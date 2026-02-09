@@ -34,36 +34,9 @@ namespace MyErpManagement.DataBase
             modelBuilder.ApplyConfiguration(new CustomerConfiguration());
             modelBuilder.ApplyConfiguration(new CustomerTagConfiguration());
             modelBuilder.ApplyConfiguration(new CustomerTagRelationConfiguration());
-            
-            // 2. 設定 UserRole 中間表與複合主鍵
-            modelBuilder.Entity<UserRole>(builder =>
-            {
-                builder.HasKey(ur => new { ur.UserId, ur.RoleId });
+            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new RolePermissionConfiguration());
 
-                // 設定一對多關係組成多對多
-                builder.HasOne(ur => ur.User)
-                       .WithMany(u => u.UserRoles)
-                       .HasForeignKey(ur => ur.UserId);
-
-                builder.HasOne(ur => ur.Role)
-                       .WithMany(r => r.UserRoles)
-                       .HasForeignKey(ur => ur.RoleId);
-            });
-
-            // 3. 設定 RolePermission 中間表與複合主鍵
-            modelBuilder.Entity<RolePermission>(builder =>
-            {
-                builder.HasKey(rp => new { rp.RoleId, rp.PermissionId });
-
-                builder.HasOne(rp => rp.Role)
-                       .WithMany(r => r.RolePermissions)
-                       .HasForeignKey(rp => rp.RoleId);
-
-                builder.HasOne(rp => rp.Permission)
-                       .WithMany(p => p.RolePermissions)
-                       .HasForeignKey(rp => rp.PermissionId);
-            });
-            
             base.OnModelCreating(modelBuilder);
         }
     }
