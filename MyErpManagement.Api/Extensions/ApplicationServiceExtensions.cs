@@ -9,23 +9,17 @@ using MyErpManagement.Api.Filters;
 using MyErpManagement.Api.Helpers;
 using MyErpManagement.Core.Exceptions.IParsers;
 using MyErpManagement.Core.Exceptions.Parsers;
-using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.CacheModule.IServices;
 using MyErpManagement.Core.Modules.CacheModule.Services;
-using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
 using MyErpManagement.Core.Modules.EmailModule.IServices;
 using MyErpManagement.Core.Modules.EmailModule.Services;
-using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IServices;
 using MyErpManagement.Core.Modules.JwtModule.Services;
 using MyErpManagement.Core.Modules.MessageBusModule.IServices;
 using MyErpManagement.Core.Modules.MessageBusModule.Services;
-using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
-using MyErpManagement.Core.Modules.UsersModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IServices;
 using MyErpManagement.Core.Modules.UsersModule.Services;
-using MyErpManagement.DataBase;
-using MyErpManagement.DataBase.Repositories;
+using MyErpManagement.DataBase.Injections;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using TGolla.Swashbuckle.AspNetCore.SwaggerGen;
@@ -80,8 +74,6 @@ namespace MyErpManagement.Api.Extensions
                 c.OrderActionsBy(apiDesc => $"{swaggerControllerOrder.SortKey(apiDesc.ActionDescriptor.RouteValues["controller"])}_{Array.IndexOf(methodsOrder, apiDesc.HttpMethod.ToLower())}");
             });
             services.AddSwaggerExamplesFromAssemblyOf<BadRequestLoginResponseExample>();
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(config["Postgres_Sql_Connection_String"]));
             services.AddStackExchangeRedisCache(options =>
             {
                 // 從設定檔讀取連接字串
@@ -89,26 +81,26 @@ namespace MyErpManagement.Api.Extensions
                 // 選填：為所有 Key 加上前綴，避免多個應用程式衝突
                 options.InstanceName = config["Redis_Instance_Name"];
             });
+
             services.AddCors();
+            services.AddScoped<IPermissionSyncService, PermissionSyncService>();
+
+            // 註冊所有的 Repositories
+            services.AddPersistenceServices(config);
+
             services.AddScoped<IExceptionParser, SqlExceptionParser>();
             services.AddScoped<IPasswordService, PasswordService>();
-            services.AddScoped<IPermissionSyncService, PermissionSyncService>();
             services.AddScoped<IJwtService, JwtService>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IPermissionRepository, PermissionRepository>();
-            services.AddScoped<IJwtRecordRepository, JwtRecordRepository>();
-            services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<ICustomerTagRepository, CustomerTagRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICachService, CachService>();
             // 註冊 RabbitMQ 的發送者 (讓 API 控制器使用)
             services.AddSingleton<IRabbitMqService, RabbitMqService>();
+
             // 註冊背景消費者
             services.AddHostedService<EmailConsumerWorker>();
+
             services.AddMapster();
+            
             return services;
         }
     }
