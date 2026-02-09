@@ -1,4 +1,4 @@
-﻿namespace MyErpManagement.Core.Dtos.Customers.response
+﻿namespace MyErpManagement.Core.Dtos.Customers.Response
 {
     public class CustomerResponseDto
     {

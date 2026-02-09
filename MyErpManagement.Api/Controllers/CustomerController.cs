@@ -6,7 +6,7 @@ using MyErpManagement.Api.Attributes;
 using MyErpManagement.Api.Constants;
 using MyErpManagement.Api.Helpers;
 using MyErpManagement.Core.Dtos.Customers.Request;
-using MyErpManagement.Core.Dtos.Customers.response;
+using MyErpManagement.Core.Dtos.Customers.Response;
 using MyErpManagement.Core.Dtos.Shared;
 using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.CustomerModule.Entities;

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyErpManagement.Api.Constants;
 using MyErpManagement.Core.Dtos.Customers.Request;
-using MyErpManagement.Core.Dtos.Customers.response;
+using MyErpManagement.Core.Dtos.Customers.Response;
 using MyErpManagement.Core.Dtos.Shared;
 using MyErpManagement.Core.Modules.CustomerModule.Entities;
 using MyErpManagement.IntegrationTests.Constants;
