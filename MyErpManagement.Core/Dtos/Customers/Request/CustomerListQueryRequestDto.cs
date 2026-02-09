@@ -1,4 +1,4 @@
-﻿using MyErpManagement.Core.Modules.ProductsModule.Models;
+﻿using MyErpManagement.Core.Modules.CustomerModule.Models;
 
 namespace MyErpManagement.Core.Dtos.Customers.Request
 {

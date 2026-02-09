@@ -3,7 +3,7 @@ using MyErpManagement.Core.Enums;
 using MyErpManagement.Core.Modules.CustomerModule.Entities;
 using MyErpManagement.Core.Modules.CustomerModule.Enums;
 using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
-using MyErpManagement.Core.Modules.ProductsModule.Models;
+using MyErpManagement.Core.Modules.CustomerModule.Models;
 
 namespace MyErpManagement.DataBase.Repositories
 {
