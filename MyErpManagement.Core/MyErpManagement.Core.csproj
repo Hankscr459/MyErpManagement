@@ -12,6 +12,7 @@
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.1" />
     <PackageReference Include="Npgsql" Version="10.0.1" />
     <PackageReference Include="RabbitMQ.Client" Version="7.2.0" />
