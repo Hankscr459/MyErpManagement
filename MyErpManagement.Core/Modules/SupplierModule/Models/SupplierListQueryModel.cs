@@ -1,9 +1,9 @@
 ﻿using MyErpManagement.Core.Enums;
-using MyErpManagement.Core.Modules.CustomerModule.Enums;
+using MyErpManagement.Core.Modules.SupplierModule.Enums;
 
-namespace MyErpManagement.Core.Modules.CustomerModule.Models
+namespace MyErpManagement.Core.Modules.SupplierModule.Models
 {
-    public class CustomerListQueryModel
+    public class SupplierListQueryModel
     {
         /// <summary>
         /// 第幾頁
@@ -18,7 +18,7 @@ namespace MyErpManagement.Core.Modules.CustomerModule.Models
         /// <summary>
         /// 排序欄位 (預設: createdAt)
         /// </summary>
-        public CustomerListSortByEnum SortBy { get; set; } = CustomerListSortByEnum.createdAt;
+        public SupplierListSortByEnum SortBy { get; set; } = SupplierListSortByEnum.createdAt;
 
         /// <summary>
         /// 排序方向 (預設: desc)
@@ -30,6 +30,6 @@ namespace MyErpManagement.Core.Modules.CustomerModule.Models
         /// </summary>
         public string? Search { get; set; }
 
-        public IEnumerable<Guid>? CustomerTagIds { get; set; }
+        public IEnumerable<Guid>? SupplierTagIds { get; set; }
     }
 }

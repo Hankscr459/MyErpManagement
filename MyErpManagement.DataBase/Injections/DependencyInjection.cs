@@ -5,6 +5,7 @@ using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
+using MyErpManagement.Core.Modules.SupplierModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
 using MyErpManagement.DataBase.Repositories;
 
@@ -26,6 +27,8 @@ namespace MyErpManagement.DataBase.Injections
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICustomerTagRepository, CustomerTagRepository>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<ISupplierTagRepository, SupplierTagRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;

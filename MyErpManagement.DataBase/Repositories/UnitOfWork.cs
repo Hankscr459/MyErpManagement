@@ -4,6 +4,7 @@ using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
+using MyErpManagement.Core.Modules.SupplierModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
 
 namespace MyErpManagement.DataBase.Repositories
@@ -16,7 +17,9 @@ namespace MyErpManagement.DataBase.Repositories
         IProductCategoryRepository productCategoryRepository,
         IProductRepository productRepository,
         ICustomerRepository customerRepository,
-        ICustomerTagRepository customerTagRepository
+        ICustomerTagRepository customerTagRepository,
+        ISupplierRepository supplierRepository,
+        ISupplierTagRepository supplierTagRepository
         ) : IUnitOfWork
     {
         public IUserRepository UserRepository => userRepository;
@@ -29,6 +32,8 @@ namespace MyErpManagement.DataBase.Repositories
         public IProductRepository ProductRepository => productRepository;
         public ICustomerRepository CustomerRepository => customerRepository;
         public ICustomerTagRepository CustomerTagRepository => customerTagRepository;
+        public ISupplierRepository SupplieRepository => supplierRepository;
+        public ISupplierTagRepository SupplieTagRepository => supplierTagRepository;
 
         private IDbContextTransaction? _currentTransaction;
 
