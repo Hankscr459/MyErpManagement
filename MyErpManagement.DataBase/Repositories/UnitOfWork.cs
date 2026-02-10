@@ -32,8 +32,8 @@ namespace MyErpManagement.DataBase.Repositories
         public IProductRepository ProductRepository => productRepository;
         public ICustomerRepository CustomerRepository => customerRepository;
         public ICustomerTagRepository CustomerTagRepository => customerTagRepository;
-        public ISupplierRepository SupplieRepository => supplierRepository;
-        public ISupplierTagRepository SupplieTagRepository => supplierTagRepository;
+        public ISupplierRepository SupplierRepository => supplierRepository;
+        public ISupplierTagRepository SupplierTagRepository => supplierTagRepository;
 
         private IDbContextTransaction? _currentTransaction;
 

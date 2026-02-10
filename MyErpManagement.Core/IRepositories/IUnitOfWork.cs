@@ -1,6 +1,7 @@
 ﻿using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
+using MyErpManagement.Core.Modules.SupplierModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
 
 namespace MyErpManagement.Core.IRepositories
@@ -14,6 +15,8 @@ namespace MyErpManagement.Core.IRepositories
         IProductRepository ProductRepository { get; }
         ICustomerRepository CustomerRepository { get; }
         ICustomerTagRepository CustomerTagRepository { get; }
+        ISupplierRepository SupplierRepository { get; }
+        ISupplierTagRepository SupplierTagRepository { get; }
 
         public void Save();
         public Task<bool> Complete();

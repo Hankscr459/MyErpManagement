@@ -66,7 +66,7 @@
             }
         }
 
-            public static class Customer
+        public static class Customer
         {
             public static class CreateCustomer
             {
@@ -129,6 +129,72 @@
             {
                 public const string Key = "CustomerTag:UpdateCustomerTag";
                 public const string Name = "CustomerTag:修改客戶標籤";
+            }
+        }
+
+        public static class Supplier
+        {
+            public static class CreateSupplier
+            {
+                public const string Key = "Supplier:CreateSupplier";
+                public const string Name = "Supplier:建立供應商";
+            }
+
+            public static class ReadSupplier
+            {
+                public const string Key = "Supplier:ReadSupplier";
+                public const string Name = "Supplier:查看供應商";
+            }
+
+            public static class ReadSupplierList
+            {
+                public const string Key = "Supplier:ReadSupplierList";
+                public const string Name = "Supplier:查看供應商清單";
+            }
+
+            public static class UpdateSupplier
+            {
+                public const string Key = "Supplier:UpdateSupplier";
+                public const string Name = "Supplier:修改供應商";
+            }
+
+            public static class DeleteSupplier
+            {
+                public const string Key = "Supplier:DeleteSupplier";
+                public const string Name = "Supplier:移除單筆供應商";
+            }
+
+            public static class DeleteManySuppliers
+            {
+                public const string Key = "Supplier:DeleteManySuppliers";
+                public const string Name = "Supplier:移除多筆供應商";
+            }
+        }
+
+        public static class SupplierTag
+        {
+            public static class CreateSupplierTag
+            {
+                public const string Key = "SupplierTag:CreateSupplierTag";
+                public const string Name = "SupplierTag:建立客戶標籤";
+            }
+
+            public static class ReadSupplierTag
+            {
+                public const string Key = "SupplierTag:ReadSupplierTag";
+                public const string Name = "SupplierTag:查看客戶標籤";
+            }
+
+            public static class ReadSupplierTags
+            {
+                public const string Key = "SupplierTag:ReadSupplierTags";
+                public const string Name = "SupplierTag:查看客戶標籤清單";
+            }
+
+            public static class UpdateSupplierTag
+            {
+                public const string Key = "SupplierTag:UpdateSupplierTag";
+                public const string Name = "SupplierTag:修改客戶標籤";
             }
         }
     }

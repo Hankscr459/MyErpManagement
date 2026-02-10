@@ -14,17 +14,26 @@
             public const string InvalidEmailCode = "無效的Email驗證碼";
             public const string FailToSaveDb = "資料儲存失敗";
             public const string InvalidDto = "參數驗證失敗";
+
             public const string FailToCreateProduct = "商品新增失敗";
             public const string FailToUpdateProduct = "商品更新失敗";
             public const string FailToCreateProductCategory = "商品分類新增失敗";
             public const string FailToUpdateProductCategory = "商品分類修改失敗";
+
             public const string FailToUpdateCustomer = "客戶更新失敗";
             public const string FailToCreateCustomer = "客戶新增失敗";
             public const string FailToDeleteCustomer = "客戶移除失敗";
             public const string FailToCreateCustomerTag = "客戶標籤新增失敗";
+
+            public const string FailToUpdateSupplier = "供應商更新失敗";
+            public const string FailToCreateSupplier = "供應商新增失敗";
+            public const string FailToDeleteSupplier = "供應商移除失敗";
+            public const string FailToCreateSupplierTag = "供應商標籤新增失敗";
+
             public const string FailToSendEmailCode = "Email會員註冊驗證碼發送失敗";
             public const string FailToReSendEmailCode = "Email會員註冊驗證碼尚未失效";
             public const string FailToCreateUser = "使用者註冊失敗";
+
         }
         public static class UnAuthorized
         {
@@ -42,6 +51,8 @@
             public const string User = "使用者不存在";
             public const string Customer = "客戶不存在";
             public const string CustomerTag = "客戶標籤不存在";
+            public const string Supplier = "供應商不存在";
+            public const string SupplierTag = "供應商標籤不存在";
             public const string Product = "商品不存在";
             public const string ProductCategory = "商品分類不存在";
         }

@@ -22,7 +22,7 @@ using TGolla.Swashbuckle.AspNetCore.SwaggerGen;
 namespace MyErpManagement.Api.Controllers
 {
     [Tags("商品")]
-    [SwaggerControllerOrder(3)]
+    [SwaggerControllerOrder(4)]
     public class ProductController(
         IUnitOfWork unitOfWork,
         IMapper mapper
