@@ -110,7 +110,7 @@ namespace MyErpManagement.Api.Controllers
                 unitOfWork.CustomerRepository.Update(updateCustomerRequestDto.Adapt(customer));
                 if (!await unitOfWork.Complete())
                 {
-                    return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, "ResponseTextConstant.BadRequest.FailToUpdateCustomer"));
+                    return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToUpdateCustomer));
                 }
                 await unitOfWork.CustomerRepository.UpdateCustomerTags(customer.Id, updateCustomerRequestDto.CustomerTagIds);
                 await unitOfWork.CommitAsync();
