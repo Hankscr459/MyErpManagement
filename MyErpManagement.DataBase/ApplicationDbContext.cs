@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using MyErpManagement.Core.Modules.CustomerModule.Entities;
 using MyErpManagement.Core.Modules.JwtModule.Entities;
+using MyErpManagement.Core.Modules.OrderSequenceModule.Entities;
 using MyErpManagement.Core.Modules.ProductsModule.Entities;
 using MyErpManagement.Core.Modules.SupplierModule.Entities;
 using MyErpManagement.Core.Modules.UsersModule.Entities;
@@ -25,6 +26,7 @@ namespace MyErpManagement.DataBase
         public DbSet<CustomerTag> CustomerTags { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<SupplierTag> SupplierTags { get; set; }
+        public DbSet<OrderSequence> OrderSequences { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +44,7 @@ namespace MyErpManagement.DataBase
             modelBuilder.ApplyConfiguration(new SupplierTagRelationConfiguration());
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
             modelBuilder.ApplyConfiguration(new RolePermissionConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderSequenceConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
