@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MyErpManagement.Core.Modules.OrderSequenceModule.Entities;
+using MyErpManagement.Core.Modules.OrderNoModule.Entities;
 
 namespace MyErpManagement.DataBase.Configurations
 {

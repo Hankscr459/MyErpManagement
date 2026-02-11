@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
+using MyErpManagement.Core.Modules.OrderNoModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
 using MyErpManagement.Core.Modules.SupplierModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
@@ -19,7 +20,8 @@ namespace MyErpManagement.DataBase.Repositories
         ICustomerRepository customerRepository,
         ICustomerTagRepository customerTagRepository,
         ISupplierRepository supplierRepository,
-        ISupplierTagRepository supplierTagRepository
+        ISupplierTagRepository supplierTagRepository,
+        IOrderSequenceRepository orderSequenceRepository
         ) : IUnitOfWork
     {
         public IUserRepository UserRepository => userRepository;
@@ -34,7 +36,8 @@ namespace MyErpManagement.DataBase.Repositories
         public ICustomerTagRepository CustomerTagRepository => customerTagRepository;
         public ISupplierRepository SupplierRepository => supplierRepository;
         public ISupplierTagRepository SupplierTagRepository => supplierTagRepository;
-
+        public IOrderSequenceRepository OrderSequenceRepository => orderSequenceRepository;
+        
         private IDbContextTransaction? _currentTransaction;
 
         public void Save()

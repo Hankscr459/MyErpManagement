@@ -10,6 +10,8 @@ using MyErpManagement.Core.Modules.JwtModule.IServices;
 using MyErpManagement.Core.Modules.JwtModule.Services;
 using MyErpManagement.Core.Modules.MessageBusModule.IServices;
 using MyErpManagement.Core.Modules.MessageBusModule.Services;
+using MyErpManagement.Core.Modules.OrderNoModule.IServices;
+using MyErpManagement.Core.Modules.OrderNoModule.Services;
 using MyErpManagement.Core.Modules.UsersModule.IServices;
 using MyErpManagement.Core.Modules.UsersModule.Services;
 
@@ -33,6 +35,7 @@ namespace MyErpManagement.Core.Injections
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICachService, CachService>();
+            services.AddScoped<IOrderNoService, OrderNoService>();
             // 註冊 RabbitMQ 的發送者 (讓 API 控制器使用)
             services.AddSingleton<IRabbitMqService, RabbitMqService>();
             return services;

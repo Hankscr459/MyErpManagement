@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using MyErpManagement.Core.Modules.CustomerModule.Entities;
 using MyErpManagement.Core.Modules.JwtModule.Entities;
-using MyErpManagement.Core.Modules.OrderSequenceModule.Entities;
+using MyErpManagement.Core.Modules.OrderNoModule.Entities;
 using MyErpManagement.Core.Modules.ProductsModule.Entities;
 using MyErpManagement.Core.Modules.SupplierModule.Entities;
 using MyErpManagement.Core.Modules.UsersModule.Entities;

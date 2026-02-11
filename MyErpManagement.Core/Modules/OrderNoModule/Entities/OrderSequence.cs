@@ -1,4 +1,4 @@
-﻿namespace MyErpManagement.Core.Modules.OrderSequenceModule.Entities
+﻿namespace MyErpManagement.Core.Modules.OrderNoModule.Entities
 {
     public class OrderSequence
     {
