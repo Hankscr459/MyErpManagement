@@ -71,7 +71,7 @@ namespace MyErpManagement.Api.Controllers
                 Id = jti,
                 UserId = user.Id,
                 TokenValue = jwtResult.Token, // 或存 Hash 值
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTimeOffset.UtcNow,
                 ExpiresAt = jwtResult.ExpiresAt, // 與 JWT 設定同步
                 IsRevoked = false,
                 RemoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString(),

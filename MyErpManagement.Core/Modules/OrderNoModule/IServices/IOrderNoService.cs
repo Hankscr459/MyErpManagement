@@ -15,7 +15,7 @@ namespace MyErpManagement.Core.Modules.OrderNoModule.IServices
         /// <param name="orderType">訂單類型</param>
         /// <param name="date">訂單日期（決定所屬年月與日期字串）</param>
         /// <returns>組合完成的私有訂單編號</returns>
-        Task<string> GeneratePrivateOrderNo(OrderTypeEnum orderType, DateTime date);
+        Task<string> GeneratePrivateOrderNo(OrderTypeEnum orderType, DateTimeOffset date);
         
         /// <summary>
         /// 產生公開訂單編號

@@ -16,7 +16,7 @@ namespace MyErpManagement.Core.Modules.OrderNoModule.Services
     public class OrderNoService(IOrderSequenceRepository orderSequenceRepository) : IOrderNoService
     {
         private const string Chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        public async Task<string> GeneratePrivateOrderNo(OrderTypeEnum orderType, DateTime date)
+        public async Task<string> GeneratePrivateOrderNo(OrderTypeEnum orderType, DateTimeOffset date)
         {
             // 依據日期取得期別（yyyyMM），作為每月流水號依據
             var period = date.ToString("yyyyMM");

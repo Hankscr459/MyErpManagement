@@ -9,5 +9,5 @@ namespace MyErpManagement.Core.Modules.JwtModule.Models
     /// </summary>
     /// <param name="Token">產出的 JWT 字串</param>
     /// <param name="ExpiresAt">確定的過期時間點（用於資料庫同步）</param>
-    public record TokenResultModel(string Token, DateTime ExpiresAt);
+    public record TokenResultModel(string Token, DateTimeOffset ExpiresAt);
 }

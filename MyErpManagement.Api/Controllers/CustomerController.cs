@@ -231,7 +231,7 @@ namespace MyErpManagement.Api.Controllers
             }
 
             customerTag = updateCustomerRequestTagDto.Adapt(customerTag);
-            customerTag.UpdateAt = DateTime.UtcNow;
+            customerTag.UpdateAt = DateTimeOffset.UtcNow;
             unitOfWork.CustomerTagRepository.Update(customerTag);
             if (!await unitOfWork.Complete())
             {

@@ -231,7 +231,7 @@ namespace MyErpManagement.Api.Controllers
             }
 
             supplierTag = updateSupplierRequestTagDto.Adapt(supplierTag);
-            supplierTag.UpdateAt = DateTime.UtcNow;
+            supplierTag.UpdateAt = DateTimeOffset.UtcNow;
             unitOfWork.SupplierTagRepository.Update(supplierTag);
             if (!await unitOfWork.Complete())
             {
