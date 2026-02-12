@@ -5,6 +5,7 @@ using MyErpManagement.Core.Modules.InventoryModule.Entities;
 using MyErpManagement.Core.Modules.JwtModule.Entities;
 using MyErpManagement.Core.Modules.OrderNoModule.Entities;
 using MyErpManagement.Core.Modules.ProductsModule.Entities;
+using MyErpManagement.Core.Modules.PurchaseOrderModule.Entities;
 using MyErpManagement.Core.Modules.SupplierModule.Entities;
 using MyErpManagement.Core.Modules.UsersModule.Entities;
 using MyErpManagement.DataBase.Configurations;
@@ -32,7 +33,8 @@ namespace MyErpManagement.DataBase
         public DbSet<InventoryPolicy> InventoryPolicies { get; set; }
         public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
         public DbSet<WareHouse> WareHouses { get; set; }
-
+        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration(_config));
@@ -54,6 +56,8 @@ namespace MyErpManagement.DataBase
             modelBuilder.ApplyConfiguration(new InventoryTransactionConfiguration());
             modelBuilder.ApplyConfiguration(new InventoryPolicyConfiguration());
             modelBuilder.ApplyConfiguration(new WareHouseConfiguration());
+            modelBuilder.ApplyConfiguration(new PurchaseOrderConfiguration());
+            modelBuilder.ApplyConfiguration(new PurchaseOrderLineConfiguration());
             
             base.OnModelCreating(modelBuilder);
         }
