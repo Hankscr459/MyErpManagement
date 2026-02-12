@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
+using MyErpManagement.Core.Modules.InventoryModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.OrderNoModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
@@ -21,7 +22,11 @@ namespace MyErpManagement.DataBase.Repositories
         ICustomerTagRepository customerTagRepository,
         ISupplierRepository supplierRepository,
         ISupplierTagRepository supplierTagRepository,
-        IOrderSequenceRepository orderSequenceRepository
+        IOrderSequenceRepository orderSequenceRepository,
+        IInventoryRepository inventoryRepository,
+        IInventoryPolicyRepository inventoryPolicyRepository,
+        IInventoryTransactionRepository inventoryTransactionRepository,
+        IWareHouseRepository wareHouseRepository
         ) : IUnitOfWork
     {
         public IUserRepository UserRepository => userRepository;
@@ -37,7 +42,10 @@ namespace MyErpManagement.DataBase.Repositories
         public ISupplierRepository SupplierRepository => supplierRepository;
         public ISupplierTagRepository SupplierTagRepository => supplierTagRepository;
         public IOrderSequenceRepository OrderSequenceRepository => orderSequenceRepository;
-        
+        public IInventoryRepository InventoryRepository => inventoryRepository;
+        public IInventoryPolicyRepository InventoryPolicyRepository  => inventoryPolicyRepository;
+        public IInventoryTransactionRepository InventoryTransactionRepository => inventoryTransactionRepository;
+        public IWareHouseRepository WareHouseRepository => wareHouseRepository;
         private IDbContextTransaction? _currentTransaction;
 
         public void Save()

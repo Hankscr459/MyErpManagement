@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
+using MyErpManagement.Core.Modules.InventoryModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.OrderNoModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
@@ -31,6 +32,10 @@ namespace MyErpManagement.DataBase.Injections
             services.AddScoped<ISupplierRepository, SupplierRepository>();
             services.AddScoped<ISupplierTagRepository, SupplierTagRepository>();
             services.AddScoped<IOrderSequenceRepository, OrderSequenceRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<IInventoryPolicyRepository, InventoryPolicyRepository>();
+            services.AddScoped<IInventoryTransactionRepository, InventoryTransactionRepository>();
+            services.AddScoped<IWareHouseRepository, WareHouseRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;

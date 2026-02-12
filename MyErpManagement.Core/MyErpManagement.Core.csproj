@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Modules\InventoryModule\IRepositories\" />
     <Folder Include="Modules\InventoryModule\Repositories\" />
   </ItemGroup>
 
