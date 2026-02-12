@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyErpManagement.DataBase;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyErpManagement.DataBase.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260212130012_CreateInventory")]
+    partial class CreateInventory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,40 +160,6 @@ namespace MyErpManagement.DataBase.Migrations
                         .IsUnique();
 
                     b.ToTable("Inventories");
-                });
-
-            modelBuilder.Entity("MyErpManagement.Core.Modules.InventoryModule.Entities.InventoryPolicy", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("SafetyStock")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WarehouseId");
-
-                    b.HasIndex("ProductId", "WarehouseId")
-                        .IsUnique();
-
-                    b.ToTable("InventoryPolicies");
                 });
 
             modelBuilder.Entity("MyErpManagement.Core.Modules.InventoryModule.Entities.InventoryTransaction", b =>
@@ -683,25 +652,6 @@ namespace MyErpManagement.DataBase.Migrations
                 });
 
             modelBuilder.Entity("MyErpManagement.Core.Modules.InventoryModule.Entities.Inventory", b =>
-                {
-                    b.HasOne("MyErpManagement.Core.Modules.ProductsModule.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MyErpManagement.Core.Modules.InventoryModule.Entities.WareHouse", "WareHouse")
-                        .WithMany()
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("WareHouse");
-                });
-
-            modelBuilder.Entity("MyErpManagement.Core.Modules.InventoryModule.Entities.InventoryPolicy", b =>
                 {
                     b.HasOne("MyErpManagement.Core.Modules.ProductsModule.Entities.Product", "Product")
                         .WithMany()

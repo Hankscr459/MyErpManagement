@@ -20,4 +20,9 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Modules\InventoryModule\IRepositories\" />
+    <Folder Include="Modules\InventoryModule\Repositories\" />
+  </ItemGroup>
+
 </Project>

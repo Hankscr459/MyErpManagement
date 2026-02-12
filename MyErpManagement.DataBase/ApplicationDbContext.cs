@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyErpManagement.Core.Modules.CustomerModule.Entities;
+using MyErpManagement.Core.Modules.InventoryModule.Entities;
 using MyErpManagement.Core.Modules.JwtModule.Entities;
 using MyErpManagement.Core.Modules.OrderNoModule.Entities;
 using MyErpManagement.Core.Modules.ProductsModule.Entities;
@@ -27,6 +28,10 @@ namespace MyErpManagement.DataBase
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<SupplierTag> SupplierTags { get; set; }
         public DbSet<OrderSequence> OrderSequences { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<InventoryPolicy> InventoryPolicies { get; set; }
+        public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
+        public DbSet<WareHouse> WareHouses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,7 +50,11 @@ namespace MyErpManagement.DataBase
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
             modelBuilder.ApplyConfiguration(new RolePermissionConfiguration());
             modelBuilder.ApplyConfiguration(new OrderSequenceConfiguration());
-
+            modelBuilder.ApplyConfiguration(new InventoryConfiguraion());
+            modelBuilder.ApplyConfiguration(new InventoryTransactionConfiguration());
+            modelBuilder.ApplyConfiguration(new InventoryPolicyConfiguration());
+            modelBuilder.ApplyConfiguration(new WareHouseConfiguration());
+            
             base.OnModelCreating(modelBuilder);
         }
     }
