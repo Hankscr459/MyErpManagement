@@ -1,9 +1,11 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MyErpManagement.Api.BackgroundServices;
+using MyErpManagement.Api.Conventions;
 using MyErpManagement.Api.Examples.Auth;
 using MyErpManagement.Api.Filters;
 using MyErpManagement.Api.Helpers;
@@ -24,6 +26,9 @@ namespace MyErpManagement.Api.Extensions
             {
                 // 移除其他 Formatter 或確保 JsonFormatter 在首位
                 options.ReturnHttpNotAcceptable = true;
+                options.Conventions.Add(
+                    new RouteTokenTransformerConvention(
+                        new KebabCaseParameterTransformer()));
             })
                 .ConfigureApiBehaviorOptions(opt =>
                 {
