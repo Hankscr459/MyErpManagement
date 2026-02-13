@@ -7,6 +7,7 @@ using MyErpManagement.Core.Modules.InventoryModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.OrderNoModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
+using MyErpManagement.Core.Modules.PurchaseOrderModule.IRepositories;
 using MyErpManagement.Core.Modules.SupplierModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
 using MyErpManagement.DataBase.Repositories;
@@ -36,6 +37,7 @@ namespace MyErpManagement.DataBase.Injections
             services.AddScoped<IInventoryPolicyRepository, InventoryPolicyRepository>();
             services.AddScoped<IInventoryTransactionRepository, InventoryTransactionRepository>();
             services.AddScoped<IWareHouseRepository, WareHouseRepository>();
+            services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;

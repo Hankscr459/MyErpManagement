@@ -1,4 +1,5 @@
 ﻿using MyErpManagement.Core.Modules.InventoryModule.Entities;
+using MyErpManagement.Core.Modules.PurchaseOrderModule.Enums;
 using MyErpManagement.Core.Modules.SupplierModule.Entities;
 
 namespace MyErpManagement.Core.Modules.PurchaseOrderModule.Entities
@@ -9,6 +10,8 @@ namespace MyErpManagement.Core.Modules.PurchaseOrderModule.Entities
         public string OrderNo { get; set; } = null!;
         public Guid WarehouseId { get; set; }
         public Guid SupplierId { get; set; }
+        public Decimal TotalPrice { get; set; }
+        public PurchaseOrderStatusEnum Status { get; set; }
         public Guid CreatedBy { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset UpdatedAt { get; set; }

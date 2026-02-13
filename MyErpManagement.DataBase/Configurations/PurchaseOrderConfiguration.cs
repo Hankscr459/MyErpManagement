@@ -14,6 +14,10 @@ namespace MyErpManagement.DataBase.Configurations
                 .HasDefaultValueSql("now()");
             builder.Property(po => po.UpdatedAt)
                 .HasDefaultValueSql("now()");
+            builder.HasIndex(x => x.OrderNo).IsUnique();
+            builder.HasMany(x => x.Lines)
+             .WithOne(x => x.PurchaseOrder)
+             .HasForeignKey(x => x.PurchaseOrderId);
         }
     }
 }

@@ -6,6 +6,7 @@ using MyErpManagement.Core.Modules.InventoryModule.IRepositories;
 using MyErpManagement.Core.Modules.JwtModule.IRepositories;
 using MyErpManagement.Core.Modules.OrderNoModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
+using MyErpManagement.Core.Modules.PurchaseOrderModule.IRepositories;
 using MyErpManagement.Core.Modules.SupplierModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
 
@@ -26,7 +27,8 @@ namespace MyErpManagement.DataBase.Repositories
         IInventoryRepository inventoryRepository,
         IInventoryPolicyRepository inventoryPolicyRepository,
         IInventoryTransactionRepository inventoryTransactionRepository,
-        IWareHouseRepository wareHouseRepository
+        IWareHouseRepository wareHouseRepository,
+        IPurchaseOrderRepository purchaseOrderRepository
         ) : IUnitOfWork
     {
         public IUserRepository UserRepository => userRepository;
@@ -46,6 +48,7 @@ namespace MyErpManagement.DataBase.Repositories
         public IInventoryPolicyRepository InventoryPolicyRepository  => inventoryPolicyRepository;
         public IInventoryTransactionRepository InventoryTransactionRepository => inventoryTransactionRepository;
         public IWareHouseRepository WareHouseRepository => wareHouseRepository;
+        public IPurchaseOrderRepository PurchaseOrderRepository => purchaseOrderRepository;
         private IDbContextTransaction? _currentTransaction;
 
         public void Save()
