@@ -37,6 +37,7 @@
                 public const string Key = "Product:UpdateProduct";
                 public const string Name = "Product:修改商品";
             }
+
         }
 
         public static class ProductCategory
@@ -195,6 +196,15 @@
             {
                 public const string Key = "SupplierTag:UpdateSupplierTag";
                 public const string Name = "SupplierTag:修改客戶標籤";
+            }
+        }
+
+        public static class PurchaseOrder
+        {
+            public static class CreatePurchaseOrder
+            {
+                public const string Key = "PurchaseOrder:CreatePurchaseOrder";
+                public const string Name = "PurchaseOrder:新增採購單";
             }
         }
     }
