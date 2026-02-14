@@ -3,7 +3,7 @@ using MyErpManagement.Core.Modules.ProductsModule.Entities;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.Models;
 
-namespace MyErpManagement.DataBase.Repositories
+namespace MyErpManagement.DataBase.Repositories.ProductRepositories
 {
     public class ProductCategoryRepository : Repository<ProductCategory>, IProductCategoryRepository
     {

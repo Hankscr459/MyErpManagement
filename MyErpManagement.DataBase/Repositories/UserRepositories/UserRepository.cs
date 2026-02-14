@@ -2,7 +2,7 @@
 using MyErpManagement.Core.Modules.UsersModule.Entities;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
 
-namespace MyErpManagement.DataBase.Repositories
+namespace MyErpManagement.DataBase.Repositories.UserRepositories
 {
     public class UserRepository : Repository<User>, IUserRepository
     {

@@ -5,7 +5,7 @@ using MyErpManagement.Core.Modules.CustomerModule.Enums;
 using MyErpManagement.Core.Modules.CustomerModule.IRepositories;
 using MyErpManagement.Core.Modules.CustomerModule.Models;
 
-namespace MyErpManagement.DataBase.Repositories
+namespace MyErpManagement.DataBase.Repositories.CustomerRepositories
 {
     public class CustomerRepository : Repository<Customer>, ICustomerRepository
     {

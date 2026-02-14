@@ -6,7 +6,7 @@ using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.Models;
 using System.Linq.Expressions;
 
-namespace MyErpManagement.DataBase.Repositories
+namespace MyErpManagement.DataBase.Repositories.ProductRepositories
 {
     public class ProductRepository : Repository<Product>, IProductRepository
     {

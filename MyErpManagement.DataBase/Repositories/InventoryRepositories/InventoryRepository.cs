@@ -1,7 +1,7 @@
 ﻿using MyErpManagement.Core.Modules.InventoryModule.Entities;
 using MyErpManagement.Core.Modules.InventoryModule.IRepositories;
 
-namespace MyErpManagement.DataBase.Repositories
+namespace MyErpManagement.DataBase.Repositories.InventoryRepositories
 {
     public class InventoryRepository : Repository<Inventory>, IInventoryRepository
     {

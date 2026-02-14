@@ -5,7 +5,7 @@ using MyErpManagement.Core.Modules.SupplierModule.Enums;
 using MyErpManagement.Core.Modules.SupplierModule.IRepositories;
 using MyErpManagement.Core.Modules.SupplierModule.Models;
 
-namespace MyErpManagement.DataBase.Repositories
+namespace MyErpManagement.DataBase.Repositories.SupplierRepositories
 {
     public class SupplierRepository : Repository<Supplier>, ISupplierRepository
     {

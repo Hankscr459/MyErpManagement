@@ -11,6 +11,11 @@ using MyErpManagement.Core.Modules.PurchaseOrderModule.IRepositories;
 using MyErpManagement.Core.Modules.SupplierModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
 using MyErpManagement.DataBase.Repositories;
+using MyErpManagement.DataBase.Repositories.CustomerRepositories;
+using MyErpManagement.DataBase.Repositories.InventoryRepositories;
+using MyErpManagement.DataBase.Repositories.ProductRepositories;
+using MyErpManagement.DataBase.Repositories.SupplierRepositories;
+using MyErpManagement.DataBase.Repositories.UserRepositories;
 
 namespace MyErpManagement.DataBase.Injections
 {
