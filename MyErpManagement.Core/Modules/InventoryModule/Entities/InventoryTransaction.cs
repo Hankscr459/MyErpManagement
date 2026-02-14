@@ -9,7 +9,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Entities
     {
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }
-        public Guid WarehouseId { get; set; }
+        public Guid WareHouseId { get; set; }
         public int QuantityChange { get; set; }
         /// <summary>
         /// 當時成本

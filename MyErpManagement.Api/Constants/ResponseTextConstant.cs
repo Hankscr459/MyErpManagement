@@ -34,6 +34,10 @@
             public const string FailToReSendEmailCode = "Email會員註冊驗證碼尚未失效";
             public const string FailToCreateUser = "使用者註冊失敗";
 
+            public const string FailToCreatePurchaseOrder = "採購單新增失敗";
+            public const string FailToUpdatePurchaseOrder = "採購單更新失敗";
+            public const string FailToApprovePurchaseOrder = "採購單核准失敗";
+
         }
         public static class UnAuthorized
         {
@@ -55,6 +59,7 @@
             public const string SupplierTag = "供應商標籤不存在";
             public const string Product = "商品不存在";
             public const string ProductCategory = "商品分類不存在";
+            public const string PurchaseOrder = "採購單不存在";
         }
 
         public static class Conflict

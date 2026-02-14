@@ -6,6 +6,8 @@ using MyErpManagement.Core.Modules.CacheModule.IServices;
 using MyErpManagement.Core.Modules.CacheModule.Services;
 using MyErpManagement.Core.Modules.EmailModule.IServices;
 using MyErpManagement.Core.Modules.EmailModule.Services;
+using MyErpManagement.Core.Modules.InventoryModule.IServices;
+using MyErpManagement.Core.Modules.InventoryModule.Services;
 using MyErpManagement.Core.Modules.JwtModule.IServices;
 using MyErpManagement.Core.Modules.JwtModule.Services;
 using MyErpManagement.Core.Modules.MessageBusModule.IServices;
@@ -39,6 +41,7 @@ namespace MyErpManagement.Core.Injections
             services.AddScoped<ICachService, CachService>();
             services.AddScoped<IOrderNoService, OrderNoService>();
             services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
+            services.AddScoped<IInventoryService, InventoryService>();
             // 註冊 RabbitMQ 的發送者 (讓 API 控制器使用)
             services.AddSingleton<IRabbitMqService, RabbitMqService>();
             return services;

@@ -12,5 +12,6 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Entities
         public virtual WareHouse WareHouse { get; set; } = null!;
         public DateTimeOffset CreatedAt { get; set; }
         public Guid CreatedBy { get; set; }
+        public decimal AverageCost { get; set; }
     }
 }

@@ -206,6 +206,30 @@
                 public const string Key = "PurchaseOrder:CreatePurchaseOrder";
                 public const string Name = "PurchaseOrder:新增採購單";
             }
+
+            public static class UpdatePurchaseOrder
+            {
+                public const string Key = "PurchaseOrder:UpdatePurchaseOrder";
+                public const string Name = "PurchaseOrder:修改採購單";
+            }
+
+            public static class ApprovePurchaseOrder
+            {
+                public const string Key = "PurchaseOrder:ApprovePurchaseOrder";
+                public const string Name = "PurchaseOrder:核准採購單";
+            }
+
+            public static class CancelPurchaseOrder
+            {
+                public const string Key = "PurchaseOrder:CancelPurchaseOrder";
+                public const string Name = "PurchaseOrder:取消採購單";
+            }
+
+            public static class CompletePurchaseOrder
+            {
+                public const string Key = "PurchaseOrder:CompletePurchaseOrder";
+                public const string Name = "PurchaseOrder:完成採購單";
+            }
         }
     }
 }
