@@ -38,7 +38,7 @@
             public const string FailToUpdatePurchaseOrder = "採購單更新失敗";
             public const string FailToApprovePurchaseOrder = "採購單核准失敗";
             public const string FailToCancelPurchaseOrder = "採購單取消失敗";
-            public const string FailToCompletePurchaseOrder = "採購單完成失敗";
+            public const string FailToCompletePurchaseOrder = "採購單只有在狀態 取消或核准,才能改完成狀態";
             public const string FailToUpdatePurchaseOrderForNotDrift = "採購單只有狀態 草稿 才能修改資料";
         }
         public static class UnAuthorized

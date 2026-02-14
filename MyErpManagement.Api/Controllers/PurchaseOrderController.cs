@@ -174,6 +174,29 @@ namespace MyErpManagement.Api.Controllers
         }
 
         /// <summary>
+        /// 完成採購單
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("{purchaseOrderId}/complete")]
+        [HasPermission(PermissionKeysConstant.PurchaseOrder.CompletePurchaseOrder.Key)]
+        public async Task<ActionResult> CompletePurchaseOrder(Guid purchaseOrderId)
+        {
+            var purchaseOrder = await unitOfWork.PurchaseOrderRepository.GetFirstOrDefaultAsync(po => po.Id == purchaseOrderId, "Lines");
+            if (purchaseOrder is null)
+            {
+                return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.PurchaseOrder));
+            }
+            if (purchaseOrder.Status == PurchaseOrderStatusEnum.Draft)
+            {
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToCompletePurchaseOrder));
+            }
+            purchaseOrder.Status = PurchaseOrderStatusEnum.Completed;
+            unitOfWork.PurchaseOrderRepository.Update(purchaseOrder);
+            await unitOfWork.Complete();
+            return NoContent();
+        }
+
+        /// <summary>
         /// 修改採購單
         /// </summary>
         /// <returns></returns>
