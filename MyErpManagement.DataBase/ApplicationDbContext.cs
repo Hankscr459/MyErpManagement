@@ -7,6 +7,7 @@ using MyErpManagement.Core.Modules.OrderNoModule.Entities;
 using MyErpManagement.Core.Modules.ProductsModule.Entities;
 using MyErpManagement.Core.Modules.PurchaseOrderModule.Entities;
 using MyErpManagement.Core.Modules.SupplierModule.Entities;
+using MyErpManagement.Core.Modules.TransferOrderModule.Entities;
 using MyErpManagement.Core.Modules.UsersModule.Entities;
 using MyErpManagement.DataBase.Configurations;
 using MyErpManagement.DataBase.Configurations.CustomerConfigurations;
@@ -14,6 +15,7 @@ using MyErpManagement.DataBase.Configurations.InventoryConfiguraions;
 using MyErpManagement.DataBase.Configurations.ProductConfigurations;
 using MyErpManagement.DataBase.Configurations.PurchaseOrderConfigurations;
 using MyErpManagement.DataBase.Configurations.SupplierConfigurations;
+using MyErpManagement.DataBase.Configurations.TransferOrderConfigurations;
 using MyErpManagement.DataBase.Configurations.UserConfiguraions;
 
 namespace MyErpManagement.DataBase
@@ -41,6 +43,8 @@ namespace MyErpManagement.DataBase
         public DbSet<WareHouse> WareHouses { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
+        public DbSet<TransferOrder> TransferOrders { get; set; }
+        public DbSet<TransferOrderLine> TransferOrderLines { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration(_config));
@@ -64,7 +68,9 @@ namespace MyErpManagement.DataBase
             modelBuilder.ApplyConfiguration(new WareHouseConfiguration());
             modelBuilder.ApplyConfiguration(new PurchaseOrderConfiguration());
             modelBuilder.ApplyConfiguration(new PurchaseOrderLineConfiguration());
-            
+            modelBuilder.ApplyConfiguration(new TransferOrderConfiguration());
+            modelBuilder.ApplyConfiguration(new TransferOrderLineConfiguration());
+
             base.OnModelCreating(modelBuilder);
         }
     }
