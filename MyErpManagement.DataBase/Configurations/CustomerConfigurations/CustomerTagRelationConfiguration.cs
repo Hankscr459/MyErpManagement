@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MyErpManagement.Core.Modules.CustomerModule.Entities;
 
-namespace MyErpManagement.DataBase.Configurations
+namespace MyErpManagement.DataBase.Configurations.CustomerConfigurations
 {
     internal class CustomerTagRelationConfiguration : IEntityTypeConfiguration<CustomerTagRelation>
     {

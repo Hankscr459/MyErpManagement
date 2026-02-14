@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MyErpManagement.Core.Modules.UsersModule.Entities;
 
-namespace MyErpManagement.DataBase.Configurations
+namespace MyErpManagement.DataBase.Configurations.UserConfiguraions
 {
     public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MyErpManagement.Core.Modules.SupplierModule.Entities;
 
-namespace MyErpManagement.DataBase.Configurations
+namespace MyErpManagement.DataBase.Configurations.SupplierConfigurations
 {
     public class SupplierTagRelationConfiguration : IEntityTypeConfiguration<SupplierTagRelation>
     {

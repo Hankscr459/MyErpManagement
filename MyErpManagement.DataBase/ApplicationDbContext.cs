@@ -9,6 +9,12 @@ using MyErpManagement.Core.Modules.PurchaseOrderModule.Entities;
 using MyErpManagement.Core.Modules.SupplierModule.Entities;
 using MyErpManagement.Core.Modules.UsersModule.Entities;
 using MyErpManagement.DataBase.Configurations;
+using MyErpManagement.DataBase.Configurations.CustomerConfigurations;
+using MyErpManagement.DataBase.Configurations.InventoryConfiguraions;
+using MyErpManagement.DataBase.Configurations.ProductConfigurations;
+using MyErpManagement.DataBase.Configurations.PurchaseOrderConfigurations;
+using MyErpManagement.DataBase.Configurations.SupplierConfigurations;
+using MyErpManagement.DataBase.Configurations.UserConfiguraions;
 
 namespace MyErpManagement.DataBase
 {

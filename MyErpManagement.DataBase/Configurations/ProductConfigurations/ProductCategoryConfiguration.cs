@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MyErpManagement.Core.Modules.ProductsModule.Entities;
 using MyErpManagement.DataBase.SeedData;
 
-namespace MyErpManagement.DataBase.Configurations
+namespace MyErpManagement.DataBase.Configurations.ProductConfigurations
 {
     public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCategory>
     {

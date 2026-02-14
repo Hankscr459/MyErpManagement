@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MyErpManagement.Core.Modules.SupplierModule.Entities;
+using MyErpManagement.Core.Modules.CustomerModule.Entities;
 
-namespace MyErpManagement.DataBase.Configurations
+namespace MyErpManagement.DataBase.Configurations.CustomerConfigurations
 {
-    public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
+    public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
     {
-        public void Configure(EntityTypeBuilder<Supplier> builder)
+        public void Configure(EntityTypeBuilder<Customer> builder)
         {
             builder.HasKey(x => x.Id);
 
@@ -31,9 +31,9 @@ namespace MyErpManagement.DataBase.Configurations
                    .HasPrecision(18, 2); // 建議設定金額精度
 
             // 設定與中間表的關係 (一對多，組成多對多的一環)
-            builder.HasMany(c => c.SupplierTagRelations)
-                   .WithOne(ctr => ctr.Supplier)
-                   .HasForeignKey(ctr => ctr.SupplierId)
+            builder.HasMany(c => c.CustomerTagRelations)
+                   .WithOne(ctr => ctr.Customer)
+                   .HasForeignKey(ctr => ctr.CustomerId)
                    .OnDelete(DeleteBehavior.Cascade);
 
             // 配置索引

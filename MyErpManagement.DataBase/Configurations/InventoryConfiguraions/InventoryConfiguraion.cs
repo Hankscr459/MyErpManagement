@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MyErpManagement.Core.Modules.InventoryModule.Entities;
 
-namespace MyErpManagement.DataBase.Configurations
+namespace MyErpManagement.DataBase.Configurations.InventoryConfiguraions
 {
     public class InventoryConfiguraion : IEntityTypeConfiguration<Inventory>
     {

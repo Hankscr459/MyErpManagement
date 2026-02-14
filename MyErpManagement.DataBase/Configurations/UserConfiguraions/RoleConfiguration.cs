@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MyErpManagement.DataBase.SeedData;
 using MyErpManagement.Core.Modules.UsersModule.Entities;
 
-namespace MyErpManagement.DataBase.Configurations
+namespace MyErpManagement.DataBase.Configurations.UserConfiguraions
 {
     public class RoleConfiguration : IEntityTypeConfiguration<Role>
     {

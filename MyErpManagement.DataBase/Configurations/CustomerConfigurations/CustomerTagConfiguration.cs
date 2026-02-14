@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MyErpManagement.Core.Modules.SupplierModule.Entities;
+using MyErpManagement.Core.Modules.CustomerModule.Entities;
 
-namespace MyErpManagement.DataBase.Configurations
+namespace MyErpManagement.DataBase.Configurations.CustomerConfigurations
 {
-    public class SupplierTagConfiguration : IEntityTypeConfiguration<SupplierTag>
+    public class CustomerTagConfiguration : IEntityTypeConfiguration<CustomerTag>
     {
-        public void Configure(EntityTypeBuilder<SupplierTag> builder)
+        public void Configure(EntityTypeBuilder<CustomerTag> builder)
         {
             builder.HasKey(x => x.Id);
 
@@ -24,9 +24,9 @@ namespace MyErpManagement.DataBase.Configurations
                    .HasDefaultValueSql("now()");
 
             // 設定與中間表的關係
-            builder.HasMany(t => t.SupplierTagRelations)
-                   .WithOne(ctr => ctr.SupplierTag)
-                   .HasForeignKey(ctr => ctr.SupplierTagId)
+            builder.HasMany(t => t.CustomerTagRelations)
+                   .WithOne(ctr => ctr.CustomerTag)
+                   .HasForeignKey(ctr => ctr.CusomterTagId)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(ct => ct.Name).IsUnique();

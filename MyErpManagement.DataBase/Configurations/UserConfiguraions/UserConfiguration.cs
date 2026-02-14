@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using MyErpManagement.Core.Modules.UsersModule.Entities;
 using MyErpManagement.DataBase.SeedData;
 
-namespace MyErpManagement.DataBase.Configurations
+namespace MyErpManagement.DataBase.Configurations.UserConfiguraions
 {
     public class UserConfiguration : IEntityTypeConfiguration<User>
     {

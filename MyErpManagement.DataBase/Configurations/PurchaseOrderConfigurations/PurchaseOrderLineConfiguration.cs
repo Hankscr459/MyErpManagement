@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MyErpManagement.Core.Modules.PurchaseOrderModule.Entities;
 
-namespace MyErpManagement.DataBase.Configurations
+namespace MyErpManagement.DataBase.Configurations.PurchaseOrderConfigurations
 {
     public class PurchaseOrderLineConfiguration : IEntityTypeConfiguration<PurchaseOrderLine>
     {
