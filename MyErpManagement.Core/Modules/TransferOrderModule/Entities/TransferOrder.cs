@@ -7,12 +7,16 @@ namespace MyErpManagement.Core.Modules.TransferOrderModule.Entities
     {
         public Guid Id { get; set; }
 
-        public string TransferNo { get; set; } = null!;
-        public DateTime CreatedAt { get; set; }
+        public string OrderNo { get; set; } = null!;
+        public DateTimeOffset CreatedAt { get; set; }
 
         public Guid FromWareHouseId { get; set; }
         public Guid ToWareHouseId { get; set; }
 
+        public Guid CreatedBy { get; set; }
+        public Guid? ApprovedBy { get; set; }
+        public Guid? CancelBy { get; set; }
+        public Guid? CompleteBy { get; set; }
         public WareHouse FromWareHouse { get; set; } = null!;
         public WareHouse ToWareHouse { get; set; } = null!;
 

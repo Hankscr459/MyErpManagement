@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyErpManagement.DataBase;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyErpManagement.DataBase.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260214151542_UpdateTransferOrderField")]
+    partial class UpdateTransferOrderField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -629,24 +632,24 @@ namespace MyErpManagement.DataBase.Migrations
                     b.Property<Guid>("FromWareHouseId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("OrderNo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.Property<Guid>("ToWareHouseId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("TransferNo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FromWareHouseId");
 
-                    b.HasIndex("OrderNo")
-                        .IsUnique();
-
                     b.HasIndex("ToWareHouseId");
+
+                    b.HasIndex("TransferNo")
+                        .IsUnique();
 
                     b.ToTable("TransferOrders");
                 });
