@@ -4,6 +4,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.IServices
 {
     public interface IInventoryService
     {
-        Task AddInventoryByPurchaseOrder(AddInventoryModel addInventoryModel);
+        Task AddInventoryByCreatePurchaseOrder(InventoryModel addInventoryModel);
+        Task<bool> RestoreInventoryByCancelPurchaseOrder(InventoryModel restoreInventoryModel);
     }
 }

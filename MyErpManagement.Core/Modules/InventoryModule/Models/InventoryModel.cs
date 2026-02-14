@@ -1,6 +1,6 @@
 ﻿namespace MyErpManagement.Core.Modules.InventoryModule.Models
 {
-    public class AddInventoryModel
+    public class InventoryModel
     {
         public Guid ProductId { get; set; }
         public Guid WareHouseId { get; set; }

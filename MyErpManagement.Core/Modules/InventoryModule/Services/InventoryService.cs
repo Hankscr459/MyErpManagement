@@ -2,13 +2,12 @@
 using MyErpManagement.Core.Modules.InventoryModule.IRepositories;
 using MyErpManagement.Core.Modules.InventoryModule.IServices;
 using MyErpManagement.Core.Modules.InventoryModule.Models;
-using MyErpManagement.Core.Modules.OrderNoModule.IRepositories;
 
 namespace MyErpManagement.Core.Modules.InventoryModule.Services
 {
     public class InventoryService(IInventoryRepository inventoryRepository) : IInventoryService
     {
-        public async Task AddInventoryByPurchaseOrder(AddInventoryModel addInventoryModel)
+        public async Task AddInventoryByCreatePurchaseOrder(InventoryModel addInventoryModel)
         {
             var inventory = await inventoryRepository.GetFirstOrDefaultAsync(
                 i => i.WarehouseId == addInventoryModel.WareHouseId && i.ProductId == addInventoryModel.ProductId
@@ -32,6 +31,30 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
                     CreatedBy = addInventoryModel.CreatedBy,
                 });
             }
+        }
+
+        public async Task<bool> RestoreInventoryByCancelPurchaseOrder(InventoryModel restoreInventoryModel)
+        {
+            var inventory = await inventoryRepository.GetFirstOrDefaultAsync(
+                i => i.WarehouseId == restoreInventoryModel.WareHouseId && i.ProductId == restoreInventoryModel.ProductId
+            );
+            if (inventory == null)
+            {
+                return false;
+            }
+            var quantity = inventory.Quantity - restoreInventoryModel?.Quantity ?? 0;
+            inventory.Quantity = quantity;
+            if (inventory.Quantity == 0)
+            {
+                inventory.AverageCost = 0;
+            }
+            else
+            {
+                inventory.AverageCost = (inventory.AverageCost * inventory.Quantity - restoreInventoryModel?.Price ?? 0 * restoreInventoryModel.Quantity) / quantity;
+            }
+
+            inventoryRepository.Update(inventory);
+            return true;
         }
     }
 }

@@ -20,6 +20,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
                 SourceType = addInventoryTransactionModel.SourceType,
                 SourceId = addInventoryTransactionModel.SourceId,
                 CreatedBy = addInventoryTransactionModel.CreatedBy,
+                TotalCost = addInventoryTransactionModel.UnitCost * addInventoryTransactionModel.QuantityChange,
             });
         }
     }

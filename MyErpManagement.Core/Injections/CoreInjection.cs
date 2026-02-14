@@ -42,6 +42,7 @@ namespace MyErpManagement.Core.Injections
             services.AddScoped<IOrderNoService, OrderNoService>();
             services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
             services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IInventoryTransactionService, InventoryTransactionService>();
             // 註冊 RabbitMQ 的發送者 (讓 API 控制器使用)
             services.AddSingleton<IRabbitMqService, RabbitMqService>();
             return services;

@@ -37,7 +37,9 @@
             public const string FailToCreatePurchaseOrder = "採購單新增失敗";
             public const string FailToUpdatePurchaseOrder = "採購單更新失敗";
             public const string FailToApprovePurchaseOrder = "採購單核准失敗";
-
+            public const string FailToCancelPurchaseOrder = "採購單取消失敗";
+            public const string FailToCompletePurchaseOrder = "採購單完成失敗";
+            public const string FailToUpdatePurchaseOrderForNotDrift = "採購單只有狀態 草稿 才能修改資料";
         }
         public static class UnAuthorized
         {
@@ -60,6 +62,7 @@
             public const string Product = "商品不存在";
             public const string ProductCategory = "商品分類不存在";
             public const string PurchaseOrder = "採購單不存在";
+            public const string Inventory = "庫存不存在";
         }
 
         public static class Conflict
