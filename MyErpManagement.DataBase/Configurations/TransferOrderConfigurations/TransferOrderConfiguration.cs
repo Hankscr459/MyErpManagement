@@ -11,7 +11,12 @@ namespace MyErpManagement.DataBase.Configurations.TransferOrderConfigurations
             builder.HasKey(x => x.Id);
             builder.Property(t => t.Id)
                    .HasDefaultValueSql("gen_random_uuid()");
-            builder.HasIndex(t => t.TransferNo).IsUnique();
+            builder.Property(po => po.CreatedAt)
+                .HasDefaultValueSql("now()");
+            builder.Property(po => po.UpdatedAt)
+                .HasDefaultValueSql("now()");
+
+            builder.HasIndex(t => t.OrderNo).IsUnique();
 
             builder.HasMany(t => t.Lines)
              .WithOne(t => t.TransferOrder)

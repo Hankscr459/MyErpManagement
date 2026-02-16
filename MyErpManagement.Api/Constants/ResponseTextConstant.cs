@@ -40,6 +40,14 @@
             public const string FailToCancelPurchaseOrder = "採購單取消失敗";
             public const string FailToCompletePurchaseOrder = "採購單只有在狀態 取消或核准,才能改完成狀態";
             public const string FailToUpdatePurchaseOrderForNotDrift = "採購單只有狀態 草稿 才能修改資料";
+
+            public const string FailToCreateTransferOrder = "調貨單新增失敗";
+            public const string FailToUpdateTransferOrder = "調貨單更新失敗";
+            public const string FailToApproveTransferOrder = "調貨單核准失敗";
+            public const string FailToCancelTransferOrder = "調貨單取消失敗";
+            public const string FailToCompleteTransferOrder = "調貨單只有在狀態 取消或核准,才能改完成狀態";
+            public const string FailToUpdateTransferOrderForNotDrift = "調貨單只有狀態 草稿 才能修改資料";
+
         }
         public static class UnAuthorized
         {
@@ -62,6 +70,7 @@
             public const string Product = "商品不存在";
             public const string ProductCategory = "商品分類不存在";
             public const string PurchaseOrder = "採購單不存在";
+            public const string Transfer = "調貨單不存在"
             public const string Inventory = "庫存不存在";
         }
 

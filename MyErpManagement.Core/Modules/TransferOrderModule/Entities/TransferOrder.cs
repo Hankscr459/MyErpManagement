@@ -9,7 +9,7 @@ namespace MyErpManagement.Core.Modules.TransferOrderModule.Entities
 
         public string OrderNo { get; set; } = null!;
         public DateTimeOffset CreatedAt { get; set; }
-
+        public DateTimeOffset UpdatedAt { get; set; }
         public Guid FromWareHouseId { get; set; }
         public Guid ToWareHouseId { get; set; }
 

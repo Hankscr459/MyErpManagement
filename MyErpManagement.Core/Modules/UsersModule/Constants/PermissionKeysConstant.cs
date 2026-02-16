@@ -231,5 +231,38 @@
                 public const string Name = "PurchaseOrder:完成採購單";
             }
         }
+
+        public static class TransferOrder
+        {
+            public static class CreateTransferOrder
+            {
+                public const string Key = "TransferOrder:CreateTransferOrder";
+                public const string Name = "TransferOrder:新增調貨單";
+            }
+
+            public static class UpdateTransferOrder
+            {
+                public const string Key = "TransferOrder:UpdateTransferOrder";
+                public const string Name = "TransferOrder:修改調貨單";
+            }
+
+            public static class ApproveTransferOrder
+            {
+                public const string Key = "TransferOrder:ApproveTransferOrder";
+                public const string Name = "TransferOrder:核准調貨單";
+            }
+
+            public static class CancelTransferOrder
+            {
+                public const string Key = "TransferOrder:CancelTransferOrder";
+                public const string Name = "TransferOrder:取消調貨單";
+            }
+
+            public static class CompleteTransferOrder
+            {
+                public const string Key = "TransferOrder:CompleteTransferOrder";
+                public const string Name = "TransferOrder:完成調貨單";
+            }
+        }
     }
 }

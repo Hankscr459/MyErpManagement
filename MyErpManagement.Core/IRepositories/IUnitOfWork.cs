@@ -5,6 +5,7 @@ using MyErpManagement.Core.Modules.OrderNoModule.IRepositories;
 using MyErpManagement.Core.Modules.ProductsModule.IRepositories;
 using MyErpManagement.Core.Modules.PurchaseOrderModule.IRepositories;
 using MyErpManagement.Core.Modules.SupplierModule.IRepositories;
+using MyErpManagement.Core.Modules.TransferOrderModule.IRepositories;
 using MyErpManagement.Core.Modules.UsersModule.IRepositories;
 
 namespace MyErpManagement.Core.IRepositories
@@ -26,6 +27,7 @@ namespace MyErpManagement.Core.IRepositories
         IInventoryTransactionRepository InventoryTransactionRepository { get; }
         IWareHouseRepository WareHouseRepository { get; }
         IPurchaseOrderRepository PurchaseOrderRepository { get; }
+        ITransferOrderRepository TransferOrderRepository { get; }
         public void Save();
         public Task<bool> Complete();
         public bool HasChanges();

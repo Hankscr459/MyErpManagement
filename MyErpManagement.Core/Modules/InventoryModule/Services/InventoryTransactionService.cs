@@ -23,5 +23,23 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
                 TotalCost = addInventoryTransactionModel.UnitCost * addInventoryTransactionModel.QuantityChange,
             });
         }
+
+        public async Task AddInventoryTransactionByTransferOrder(TransferInventoryTransactionModel addInventoryTransactionModel)
+        {
+            var fromInventory = await inventoryTransactionRePository.GetFirstOrDefaultAsync(
+                i => i.WareHouseId == addInventoryTransactionModel.FromWareHouseId && i.ProductId == addInventoryTransactionModel.ProductId
+            );
+            await inventoryTransactionRePository.AddAsync(new InventoryTransaction
+            {
+                ProductId = addInventoryTransactionModel.ProductId,
+                WareHouseId = addInventoryTransactionModel.FromWareHouseId,
+                QuantityChange = -addInventoryTransactionModel.QuantityChange,
+                UnitCost = fromInventory.UnitCost,
+                SourceType = InventorySourceTypeEnum.TransferOrder,
+                SourceId = addInventoryTransactionModel.SourceId,
+                CreatedBy = addInventoryTransactionModel.CreatedBy,
+                TotalCost = fromInventory.UnitCost * addInventoryTransactionModel.QuantityChange,
+            });
+        }
     }
 }

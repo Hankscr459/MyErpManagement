@@ -56,5 +56,39 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             inventoryRepository.Update(inventory);
             return true;
         }
+
+        public async Task<bool> AddInventoryByCreateTransferOrder(TransferInventoryModel transferInventoryModel)
+        {
+            var fromInventory = await inventoryRepository.GetFirstOrDefaultAsync(
+                i => i.WarehouseId == transferInventoryModel.FromWareHouseId && i.ProductId == transferInventoryModel.ProductId
+            );
+            if (fromInventory is null)
+            {
+                return false;
+            }
+            fromInventory.Quantity = fromInventory.Quantity - transferInventoryModel?.Quantity ?? 0;
+            inventoryRepository.Update(fromInventory);
+            var toInventory = await inventoryRepository.GetFirstOrDefaultAsync(
+                i => i.WarehouseId == transferInventoryModel.ToWareHouseId && i.ProductId == transferInventoryModel.ProductId
+            );
+            if (toInventory is null)
+            {
+                await inventoryRepository.AddAsync(new Inventory
+                {
+                    ProductId = transferInventoryModel.ProductId,
+                    WarehouseId = transferInventoryModel.ToWareHouseId,
+                    Quantity = transferInventoryModel.Quantity,
+                    AverageCost = fromInventory.AverageCost,
+                    CreatedBy = transferInventoryModel.CreatedBy,
+                });
+            }
+            else
+            {
+                var toQuantity = toInventory.Quantity + transferInventoryModel?.Quantity ?? 0;
+                toInventory.AverageCost = (toInventory.AverageCost * toInventory.Quantity + fromInventory.AverageCost * transferInventoryModel.Quantity) / toQuantity;
+                inventoryRepository.Update(toInventory);
+            }
+                return true;
+        }
     }
 }
