@@ -64,8 +64,8 @@ namespace MyErpManagement.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("{transferOrderId}/approve")]
-        [HasPermission(PermissionKeysConstant.PurchaseOrder.ApprovePurchaseOrder.Key)]
-        public async Task<ActionResult> ApprovePurchaseOrder(Guid transferOrderId)
+        [HasPermission(PermissionKeysConstant.TransferOrder.ApproveTransferOrder.Key)]
+        public async Task<ActionResult> ApproveTransferOrder(Guid transferOrderId)
         {
             var transferOrder = await unitOfWork.TransferOrderRepository.GetFirstOrDefaultAsync(to => to.Id == transferOrderId, "Lines");
             if (transferOrder is null)
