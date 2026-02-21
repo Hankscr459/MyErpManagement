@@ -13,7 +13,7 @@ namespace MyErpManagement.DataBase.Configurations.InventoryConfiguraions
             builder.Property(i => i.CreatedAt)
                 .HasDefaultValueSql("now()");
             // 配置索引
-            builder.HasIndex(i => new { i.ProductId, i.WarehouseId }).IsUnique();
+            builder.HasIndex(i => new { i.ProductId, i.WareHouseId }).IsUnique();
         }
     }
 }
