@@ -10,7 +10,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
         public async Task AddInventoryByCreatePurchaseOrder(InventoryModel addInventoryModel)
         {
             var inventory = await inventoryRepository.GetFirstOrDefaultAsync(
-                i => i.WarehouseId == addInventoryModel.WareHouseId && i.ProductId == addInventoryModel.ProductId
+                i => i.WareHouseId == addInventoryModel.WareHouseId && i.ProductId == addInventoryModel.ProductId
             );
             var averageCost = addInventoryModel.Price;
             if (inventory != null)
@@ -25,7 +25,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             {
                 await inventoryRepository.AddAsync(new Inventory { 
                     ProductId = addInventoryModel.ProductId,
-                    WarehouseId = addInventoryModel.WareHouseId,
+                    WareHouseId = addInventoryModel.WareHouseId,
                     Quantity = addInventoryModel.Quantity,
                     AverageCost = addInventoryModel.Price,
                     CreatedBy = addInventoryModel.CreatedBy,
@@ -36,7 +36,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
         public async Task<bool> RestoreInventoryByCancelPurchaseOrder(InventoryModel restoreInventoryModel)
         {
             var inventory = await inventoryRepository.GetFirstOrDefaultAsync(
-                i => i.WarehouseId == restoreInventoryModel.WareHouseId && i.ProductId == restoreInventoryModel.ProductId
+                i => i.WareHouseId == restoreInventoryModel.WareHouseId && i.ProductId == restoreInventoryModel.ProductId
             );
             if (inventory == null)
             {
@@ -60,7 +60,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
         public async Task<bool> AddInventoryByCreateTransferOrder(TransferInventoryModel transferInventoryModel)
         {
             var fromInventory = await inventoryRepository.GetFirstOrDefaultAsync(
-                i => i.WarehouseId == transferInventoryModel.FromWareHouseId && i.ProductId == transferInventoryModel.ProductId
+                i => i.WareHouseId == transferInventoryModel.FromWareHouseId && i.ProductId == transferInventoryModel.ProductId
             );
             if (fromInventory is null)
             {
@@ -69,14 +69,14 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             fromInventory.Quantity = fromInventory.Quantity - transferInventoryModel?.Quantity ?? 0;
             inventoryRepository.Update(fromInventory);
             var toInventory = await inventoryRepository.GetFirstOrDefaultAsync(
-                i => i.WarehouseId == transferInventoryModel.ToWareHouseId && i.ProductId == transferInventoryModel.ProductId
+                i => i.WareHouseId == transferInventoryModel.ToWareHouseId && i.ProductId == transferInventoryModel.ProductId
             );
             if (toInventory is null)
             {
                 await inventoryRepository.AddAsync(new Inventory
                 {
                     ProductId = transferInventoryModel.ProductId,
-                    WarehouseId = transferInventoryModel.ToWareHouseId,
+                    WareHouseId = transferInventoryModel.ToWareHouseId,
                     Quantity = transferInventoryModel.Quantity,
                     AverageCost = fromInventory.AverageCost,
                     CreatedBy = transferInventoryModel.CreatedBy,

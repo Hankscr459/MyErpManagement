@@ -70,7 +70,7 @@
             public const string Product = "商品不存在";
             public const string ProductCategory = "商品分類不存在";
             public const string PurchaseOrder = "採購單不存在";
-            public const string Transfer = "調貨單不存在"
+            public const string Transfer = "調貨單不存在";
             public const string Inventory = "庫存不存在";
         }
 

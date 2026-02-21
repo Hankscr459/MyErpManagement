@@ -87,18 +87,22 @@ namespace MyErpManagement.Api.Controllers
                     };
                     if (!await inventoryService.AddInventoryByCreateTransferOrder(transferInventoryArg))
                     {
-
+                        await unitOfWork.RollbackAsync();
+                        return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToApproveTransferOrder));
                     }
-                    //await inventoryTransactionService.AddInventoryTransaction(new AddInventoryTransactionModel
-                    //{
-                    //    ProductId = line.ProductId,
-                    //    WareHouseId = transferOrder.FromWareHouseId,
-                    //    QuantityChange = line.Quantity,
-                    //    UnitCost = line.Price,
-                    //    SourceType = InventorySourceTypeEnum.PurchaseOrder,
-                    //    SourceId = transferOrder.Id,
-                    //    CreatedBy = User.GetUserId(),
-                    //});
+                    var transferInventoryTransactionModel = new TransferInventoryTransactionModel{
+                        ProductId = line.ProductId,
+                        FromWareHouseId = transferOrder.FromWareHouseId,
+                        ToWareHouseId = transferOrder.ToWareHouseId,
+                        QuantityChange = line.Quantity,
+                        SourceId = transferOrder.Id,
+                        CreatedBy = User.GetUserId(),
+                    };
+                    if (!await inventoryTransactionService.AddInventoryTransactionByTransferOrder(transferInventoryTransactionModel))
+                    {
+                        await unitOfWork.RollbackAsync();
+                        return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToApproveTransferOrder));
+                    }
                 }
                 transferOrder.Status = TransferOrderStatusEnum.Approved;
                 unitOfWork.TransferOrderRepository.Update(transferOrder);
@@ -108,7 +112,7 @@ namespace MyErpManagement.Api.Controllers
             catch (Exception ex)
             {
                 await unitOfWork.RollbackAsync();
-                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToApprovePurchaseOrder));
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToApproveTransferOrder));
             }
             return NoContent();
         }

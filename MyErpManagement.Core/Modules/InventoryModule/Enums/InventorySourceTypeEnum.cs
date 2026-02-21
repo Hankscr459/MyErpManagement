@@ -4,6 +4,7 @@
     {
         PurchaseOrder = 1,
         SalesOrder = 2,
-        TransferOrder = 3,
+        TransferOrderIn = 3,
+        TransferOrderOut = 4,
     }
 }

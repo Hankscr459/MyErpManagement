@@ -7,7 +7,7 @@ using MyErpManagement.Core.Modules.UsersModule.Entities;
 
 namespace MyErpManagement.Core.Modules.InventoryModule.Services
 {
-    public class InventoryTransactionService(IInventoryTransactionRepository inventoryTransactionRePository) : IInventoryTransactionService
+    public class InventoryTransactionService(IInventoryTransactionRepository inventoryTransactionRePository, IInventoryRepository inventoryRePository) : IInventoryTransactionService
     {
         public async Task AddInventoryTransaction(AddInventoryTransactionModel addInventoryTransactionModel)
         {
@@ -24,22 +24,39 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             });
         }
 
-        public async Task AddInventoryTransactionByTransferOrder(TransferInventoryTransactionModel addInventoryTransactionModel)
+        public async Task<bool> AddInventoryTransactionByTransferOrder(TransferInventoryTransactionModel addInventoryTransactionModel)
         {
-            var fromInventory = await inventoryTransactionRePository.GetFirstOrDefaultAsync(
+            var fromInventory = await inventoryRePository.GetFirstOrDefaultAsync(
                 i => i.WareHouseId == addInventoryTransactionModel.FromWareHouseId && i.ProductId == addInventoryTransactionModel.ProductId
             );
+            if (fromInventory is null)
+            {
+                return false; 
+            }
+
             await inventoryTransactionRePository.AddAsync(new InventoryTransaction
             {
                 ProductId = addInventoryTransactionModel.ProductId,
                 WareHouseId = addInventoryTransactionModel.FromWareHouseId,
                 QuantityChange = -addInventoryTransactionModel.QuantityChange,
-                UnitCost = fromInventory.UnitCost,
-                SourceType = InventorySourceTypeEnum.TransferOrder,
+                UnitCost = fromInventory.AverageCost,
+                SourceType = InventorySourceTypeEnum.TransferOrderOut,
                 SourceId = addInventoryTransactionModel.SourceId,
                 CreatedBy = addInventoryTransactionModel.CreatedBy,
-                TotalCost = fromInventory.UnitCost * addInventoryTransactionModel.QuantityChange,
+                TotalCost = fromInventory.AverageCost * addInventoryTransactionModel.QuantityChange,
             });
+            await inventoryTransactionRePository.AddAsync(new InventoryTransaction
+            {
+                ProductId = addInventoryTransactionModel.ProductId,
+                WareHouseId = addInventoryTransactionModel.FromWareHouseId,
+                QuantityChange = addInventoryTransactionModel.QuantityChange,
+                UnitCost = fromInventory.AverageCost,
+                SourceType = InventorySourceTypeEnum.TransferOrderIn,
+                SourceId = addInventoryTransactionModel.SourceId,
+                CreatedBy = addInventoryTransactionModel.CreatedBy,
+                TotalCost = fromInventory.AverageCost * addInventoryTransactionModel.QuantityChange,
+            });
+            return true;
         }
     }
 }

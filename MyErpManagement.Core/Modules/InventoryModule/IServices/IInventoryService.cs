@@ -6,6 +6,6 @@ namespace MyErpManagement.Core.Modules.InventoryModule.IServices
     {
         Task AddInventoryByCreatePurchaseOrder(InventoryModel addInventoryModel);
         Task<bool> RestoreInventoryByCancelPurchaseOrder(InventoryModel restoreInventoryModel);
-        Task<bool> AddInventoryByCreateTransferOrder(TransferInventoryModel transferInventoryModel)
+        Task<bool> AddInventoryByCreateTransferOrder(TransferInventoryModel transferInventoryModel);
     }
 }
