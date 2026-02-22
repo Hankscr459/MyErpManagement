@@ -24,16 +24,8 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             });
         }
 
-        public async Task<bool> AddInventoryTransactionByTransferOrder(TransferInventoryTransactionModel addInventoryTransactionModel)
+        public async Task AddInventoryTransactionByTransferOrder(TransferInventoryTransactionModel addInventoryTransactionModel, Inventory fromInventory)
         {
-            var fromInventory = await inventoryRePository.GetFirstOrDefaultAsync(
-                i => i.WareHouseId == addInventoryTransactionModel.FromWareHouseId && i.ProductId == addInventoryTransactionModel.ProductId
-            );
-            if (fromInventory is null)
-            {
-                return false; 
-            }
-
             await inventoryTransactionRePository.AddAsync(new InventoryTransaction
             {
                 ProductId = addInventoryTransactionModel.ProductId,
@@ -48,7 +40,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             await inventoryTransactionRePository.AddAsync(new InventoryTransaction
             {
                 ProductId = addInventoryTransactionModel.ProductId,
-                WareHouseId = addInventoryTransactionModel.FromWareHouseId,
+                WareHouseId = addInventoryTransactionModel.ToWareHouseId,
                 QuantityChange = addInventoryTransactionModel.QuantityChange,
                 UnitCost = fromInventory.AverageCost,
                 SourceType = InventorySourceTypeEnum.TransferOrderIn,
@@ -56,7 +48,6 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
                 CreatedBy = addInventoryTransactionModel.CreatedBy,
                 TotalCost = fromInventory.AverageCost * addInventoryTransactionModel.QuantityChange,
             });
-            return true;
         }
     }
 }

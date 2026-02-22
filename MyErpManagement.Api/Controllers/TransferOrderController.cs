@@ -6,12 +6,11 @@ using MyErpManagement.Api.Helpers;
 using MyErpManagement.Core.Dtos.Shared;
 using MyErpManagement.Core.Dtos.TransferOrder.Request;
 using MyErpManagement.Core.IRepositories;
-using MyErpManagement.Core.Modules.InventoryModule.Enums;
+using MyErpManagement.Core.Modules.InventoryModule.IRepositories;
 using MyErpManagement.Core.Modules.InventoryModule.IServices;
 using MyErpManagement.Core.Modules.InventoryModule.Models;
 using MyErpManagement.Core.Modules.OrderNoModule.Enums;
 using MyErpManagement.Core.Modules.OrderNoModule.IServices;
-using MyErpManagement.Core.Modules.PurchaseOrderModule.Enums;
 using MyErpManagement.Core.Modules.TransferOrderModule.Entities;
 using MyErpManagement.Core.Modules.TransferOrderModule.Enums;
 using MyErpManagement.Core.Modules.UsersModule.Constants;
@@ -72,11 +71,22 @@ namespace MyErpManagement.Api.Controllers
             {
                 return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Transfer));
             }
+            if (transferOrder.Status != TransferOrderStatusEnum.Draft)
+            {
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToApproveTransferOrder));
+            }
             await unitOfWork.BeginTransactionAsync();
             try
             {
                 foreach (var line in transferOrder.Lines)
                 {
+                    var fromInventory = await unitOfWork.InventoryRepository.GetFirstOrDefaultAsync(
+                        i => i.WareHouseId == transferOrder.FromWareHouseId && i.ProductId == line.ProductId
+                    );
+                    if (fromInventory is null)
+                    {
+                        return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Inventory));
+                    }
                     var transferInventoryArg = new TransferInventoryModel
                     {
                         ProductId = line.ProductId,
@@ -85,11 +95,8 @@ namespace MyErpManagement.Api.Controllers
                         Quantity = line.Quantity,
                         CreatedBy = User.GetUserId(),
                     };
-                    if (!await inventoryService.AddInventoryByCreateTransferOrder(transferInventoryArg))
-                    {
-                        await unitOfWork.RollbackAsync();
-                        return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToApproveTransferOrder));
-                    }
+                    await inventoryService.AddInventoryByCreateTransferOrder(transferInventoryArg, fromInventory);
+
                     var transferInventoryTransactionModel = new TransferInventoryTransactionModel{
                         ProductId = line.ProductId,
                         FromWareHouseId = transferOrder.FromWareHouseId,
@@ -98,11 +105,7 @@ namespace MyErpManagement.Api.Controllers
                         SourceId = transferOrder.Id,
                         CreatedBy = User.GetUserId(),
                     };
-                    if (!await inventoryTransactionService.AddInventoryTransactionByTransferOrder(transferInventoryTransactionModel))
-                    {
-                        await unitOfWork.RollbackAsync();
-                        return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToApproveTransferOrder));
-                    }
+                    await inventoryTransactionService.AddInventoryTransactionByTransferOrder(transferInventoryTransactionModel, fromInventory);
                 }
                 transferOrder.Status = TransferOrderStatusEnum.Approved;
                 unitOfWork.TransferOrderRepository.Update(transferOrder);
@@ -113,6 +116,64 @@ namespace MyErpManagement.Api.Controllers
             {
                 await unitOfWork.RollbackAsync();
                 return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToApproveTransferOrder));
+            }
+            return NoContent();
+        }
+
+        /// <summary>
+        /// 取消調貨單
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("{transferOrderId}/cancel")]
+        [HasPermission(PermissionKeysConstant.TransferOrder.CancelTransferOrder.Key)]
+        public async Task<ActionResult> CancelTransferOrder(Guid transferOrderId)
+        {
+            var transferOrder = await unitOfWork.TransferOrderRepository.GetFirstOrDefaultAsync(to => to.Id == transferOrderId, "Lines");
+            if (transferOrder is null)
+            {
+                return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Transfer));
+            }
+            if (transferOrder.Status != TransferOrderStatusEnum.Approved)
+            {
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToCancelTransferOrder));
+            }
+            await unitOfWork.BeginTransactionAsync();
+            try
+            {
+                foreach (var line in transferOrder.Lines)
+                {
+                    var fromInventory = await unitOfWork.InventoryRepository.GetFirstOrDefaultAsync(
+                        i => i.WareHouseId == transferOrder.FromWareHouseId && i.ProductId == line.ProductId
+                    );
+                    if (fromInventory is null)
+                    {
+                        await unitOfWork.RollbackAsync();
+                        return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Inventory));
+                    }
+                    var toInventory = await unitOfWork.InventoryRepository.GetFirstOrDefaultAsync(
+                        i => i.WareHouseId == transferOrder.ToWareHouseId && i.ProductId == line.ProductId
+                    );
+                    if (toInventory is null)
+                    {
+                        await unitOfWork.RollbackAsync();
+                        return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Inventory));
+                    }
+                    var inventoryTransactions = await inventoryService.RestoreInventoryByCancelTransferOrder(transferOrder.Id, fromInventory, toInventory);
+                    if (inventoryTransactions is not null & inventoryTransactions?.Count() == 0) {                         await unitOfWork.RollbackAsync();
+                        await unitOfWork.RollbackAsync();
+                        return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToCancelTransferOrder));
+                    }
+                    unitOfWork.InventoryTransactionRepository.RemoveRange(inventoryTransactions!);
+                }
+                transferOrder.Status = TransferOrderStatusEnum.Cancelled;
+                unitOfWork.TransferOrderRepository.Update(transferOrder);
+                await unitOfWork.Complete();
+                await unitOfWork.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await unitOfWork.RollbackAsync();
+                return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToApproveTransferOrder, ex.Message));
             }
             return NoContent();
         }
