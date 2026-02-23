@@ -10,15 +10,17 @@ namespace MyErpManagement.Core.Modules.InventoryModule.IServices
         /// 採購單新增庫存
         /// </summary>
         /// <param name="addInventoryModel"></param>
+        /// <param name="inventory"></param>
         /// <returns></returns>
-        Task AddInventoryByPurchaseOrder(InventoryModel addInventoryModel);
+        Task AddInventoryByPurchaseOrder(InventoryModel addInventoryModel, Inventory? inventory);
         /// <summary>
         /// 還原核准後的採購單
         /// </summary>
         /// <param name="restoreInventoryModel"></param>
+        /// <param name="inventory"></param>
         /// <returns></returns>
-        Task<bool> RestoreInventoryByPurchaseOrder(InventoryModel restoreInventoryModel);
-        Task AddInventoryByCreateTransferOrder(TransferInventoryModel transferInventoryModel, Inventory inventory);
+        Task RestoreInventoryByPurchaseOrder(InventoryModel restoreInventoryModel, Inventory inventory);
+        Task AddInventoryByCreateTransferOrder(TransferInventoryModel transferInventoryModel, Inventory fromInventory, Inventory? toInventory);
         /// <summary>
         /// 還原核准後的調貨單,
         /// 還原的庫存金額會有意點誤差,因為採用平均成本法,所以會以目前庫存的平均成本為基礎去還原金額,不過數量是正確的

@@ -8,6 +8,7 @@ using MyErpManagement.Core.Dtos.PurchaseOrder.Request;
 using MyErpManagement.Core.Dtos.Shared;
 using MyErpManagement.Core.IRepositories;
 using MyErpManagement.Core.Modules.InventoryModule.Enums;
+using MyErpManagement.Core.Modules.InventoryModule.IRepositories;
 using MyErpManagement.Core.Modules.InventoryModule.IServices;
 using MyErpManagement.Core.Modules.InventoryModule.Models;
 using MyErpManagement.Core.Modules.OrderNoModule.Enums;
@@ -17,6 +18,7 @@ using MyErpManagement.Core.Modules.PurchaseOrderModule.Enums;
 using MyErpManagement.Core.Modules.PurchaseOrderModule.IServices;
 using MyErpManagement.Core.Modules.PurchaseOrderModule.Models;
 using MyErpManagement.Core.Modules.UsersModule.Constants;
+using MyErpManagement.DataBase.Repositories.InventoryRepositories;
 using System.Net;
 using TGolla.Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -81,6 +83,9 @@ namespace MyErpManagement.Api.Controllers
             {
                 foreach (var line in purchaseOrder.Lines)
                 {
+                    var inventory = await unitOfWork.InventoryRepository.GetFirstOrDefaultAsync(
+                        i => i.WareHouseId == purchaseOrder.WareHouseId && i.ProductId == line.ProductId
+                    );
                     await inventoryService.AddInventoryByPurchaseOrder(new InventoryModel
                     {
                         ProductId = line.ProductId,
@@ -88,7 +93,7 @@ namespace MyErpManagement.Api.Controllers
                         Quantity = line.Quantity,
                         Price = line.Price,
                         CreatedBy = User.GetUserId(),
-                    });
+                    }, inventory);
                     await inventoryTransactionService.AddInventoryTransaction(new AddInventoryTransactionModel
                     {
                         ProductId = line.ProductId,
@@ -144,10 +149,14 @@ namespace MyErpManagement.Api.Controllers
                         Price = line.Price,
                         CreatedBy = User.GetUserId(),
                     };
-                    if (!await inventoryService.RestoreInventoryByPurchaseOrder(inventoryModelArg))
+                    var inventory = await unitOfWork.InventoryRepository.GetFirstOrDefaultAsync(
+                        i => i.WareHouseId == purchaseOrder.WareHouseId && i.ProductId == line.ProductId
+                    );
+                    if (inventory is null)
                     {
                         return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Inventory));
                     }
+                    await inventoryService.RestoreInventoryByPurchaseOrder(inventoryModelArg, inventory);
 
                     /*** 取消採購單時，將相關的庫存交易紀錄移除 ***/
                     var inventoryTransaction = await unitOfWork.InventoryTransactionRepository.GetFirstOrDefaultAsync(

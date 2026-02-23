@@ -14,6 +14,7 @@ using MyErpManagement.Core.Modules.OrderNoModule.IServices;
 using MyErpManagement.Core.Modules.TransferOrderModule.Entities;
 using MyErpManagement.Core.Modules.TransferOrderModule.Enums;
 using MyErpManagement.Core.Modules.UsersModule.Constants;
+using MyErpManagement.DataBase.Repositories.InventoryRepositories;
 using System.Net;
 using TGolla.Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -95,7 +96,10 @@ namespace MyErpManagement.Api.Controllers
                         Quantity = line.Quantity,
                         CreatedBy = User.GetUserId(),
                     };
-                    await inventoryService.AddInventoryByCreateTransferOrder(transferInventoryArg, fromInventory);
+                    var toInventory = await unitOfWork.InventoryRepository.GetFirstOrDefaultAsync(
+                        i => i.WareHouseId == transferOrder.ToWareHouseId && i.ProductId == line.ProductId
+                    );
+                    await inventoryService.AddInventoryByCreateTransferOrder(transferInventoryArg, fromInventory, toInventory);
 
                     var transferInventoryTransactionModel = new TransferInventoryTransactionModel{
                         ProductId = line.ProductId,
