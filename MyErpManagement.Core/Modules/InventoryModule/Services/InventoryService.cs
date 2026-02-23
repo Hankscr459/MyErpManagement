@@ -7,7 +7,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
 {
     public class InventoryService(IInventoryRepository inventoryRepository, IInventoryTransactionRepository inventoryTransactionRepository) : IInventoryService
     {
-        public async Task AddInventoryByCreatePurchaseOrder(InventoryModel addInventoryModel)
+        public async Task AddInventoryByPurchaseOrder(InventoryModel addInventoryModel)
         {
             var inventory = await inventoryRepository.GetFirstOrDefaultAsync(
                 i => i.WareHouseId == addInventoryModel.WareHouseId && i.ProductId == addInventoryModel.ProductId
@@ -33,7 +33,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             }
         }
 
-        public async Task<bool> RestoreInventoryByCancelPurchaseOrder(InventoryModel restoreInventoryModel)
+        public async Task<bool> RestoreInventoryByPurchaseOrder(InventoryModel restoreInventoryModel)
         {
             var inventory = await inventoryRepository.GetFirstOrDefaultAsync(
                 i => i.WareHouseId == restoreInventoryModel.WareHouseId && i.ProductId == restoreInventoryModel.ProductId
@@ -62,13 +62,13 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             fromInventory.Quantity = fromInventory.Quantity - transferInventoryModel?.Quantity ?? 0;
             inventoryRepository.Update(fromInventory);
             var toInventory = await inventoryRepository.GetFirstOrDefaultAsync(
-                i => i.WareHouseId == transferInventoryModel.ToWareHouseId && i.ProductId == transferInventoryModel.ProductId
+                i => i.WareHouseId == transferInventoryModel!.ToWareHouseId && i.ProductId == transferInventoryModel.ProductId
             );
             if (toInventory is null)
             {
                 await inventoryRepository.AddAsync(new Inventory
                 {
-                    ProductId = transferInventoryModel.ProductId,
+                    ProductId = transferInventoryModel!.ProductId,
                     WareHouseId = transferInventoryModel.ToWareHouseId,
                     Quantity = transferInventoryModel.Quantity,
                     AverageCost = fromInventory.AverageCost,
@@ -86,6 +86,12 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
 
         public async Task<IEnumerable<InventoryTransaction?>> RestoreInventoryByCancelTransferOrder(Guid transferOrderId, Inventory fromInventory, Inventory toInventory)
         {
+            /***
+             * 還原入庫數量，
+             * 還原AverageCost的值是採用平均值的方式計算，
+             * 因為在轉移單的入庫時，已經將成本計算好並寫入InventoryTransaction了，
+             * 所以在還原的時候，可以直接從InventoryTransaction中拿到成本金額，然後用平均值的方式計算出還原後的AverageCost。
+             * ***/
             var inventoryOut = await inventoryTransactionRepository.GetFirstOrDefaultAsync(it => it.SourceId == transferOrderId && it.SourceType == Enums.InventorySourceTypeEnum.TransferOrderOut);
             var fromInventoryQuantity = fromInventory.Quantity + (inventoryOut?.QuantityChange ?? 0) * -1;
             var inventoryOutCountPrice = inventoryOut?.QuantityChange * inventoryOut?.UnitCost ?? 0;
@@ -94,6 +100,10 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             fromInventory.AverageCost = fromInventoryAverageCost;
             inventoryRepository.Update(fromInventory);
 
+            /***
+             * 還原出庫數量，
+             * 還原AverageCost的值是採用平均值的方式計算
+             * ***/
             var inventoryIn = await inventoryTransactionRepository.GetFirstOrDefaultAsync(it => it.SourceId == transferOrderId && it.SourceType == Enums.InventorySourceTypeEnum.TransferOrderIn);
             var toInventoryQuantity = toInventory.Quantity - inventoryIn?.QuantityChange ?? 0;
             decimal toInventoryAverageCost = 0;
@@ -104,6 +114,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             toInventory.Quantity = toInventoryQuantity;
             toInventory.AverageCost = toInventoryAverageCost;
             inventoryRepository.Update(toInventory);
+
             return new List<InventoryTransaction?> { inventoryOut, inventoryIn };
         }
     }

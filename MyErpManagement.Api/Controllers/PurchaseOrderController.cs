@@ -81,7 +81,7 @@ namespace MyErpManagement.Api.Controllers
             {
                 foreach (var line in purchaseOrder.Lines)
                 {
-                    await inventoryService.AddInventoryByCreatePurchaseOrder(new InventoryModel
+                    await inventoryService.AddInventoryByPurchaseOrder(new InventoryModel
                     {
                         ProductId = line.ProductId,
                         WareHouseId = purchaseOrder.WareHouseId,
@@ -144,7 +144,7 @@ namespace MyErpManagement.Api.Controllers
                         Price = line.Price,
                         CreatedBy = User.GetUserId(),
                     };
-                    if (!await inventoryService.RestoreInventoryByCancelPurchaseOrder(inventoryModelArg))
+                    if (!await inventoryService.RestoreInventoryByPurchaseOrder(inventoryModelArg))
                     {
                         return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Inventory));
                     }
