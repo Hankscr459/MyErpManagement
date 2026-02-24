@@ -72,28 +72,48 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
         public async Task<IEnumerable<InventoryTransaction?>> RestoreInventoryByCancelTransferOrder(Guid transferOrderId, Inventory fromInventory, Inventory toInventory)
         {
             /***
-             * 還原入庫數量，
+             * 還原出庫數量，
              * 還原AverageCost的值是採用平均值的方式計算，
              * 因為在轉移單的入庫時，已經將成本計算好並寫入InventoryTransaction了，
              * 所以在還原的時候，可以直接從InventoryTransaction中拿到成本金額，然後用平均值的方式計算出還原後的AverageCost。
              * ***/
+            // 此調貨單出庫紀錄
             var inventoryOut = await inventoryTransactionRepository.GetFirstOrDefaultAsync(it => it.SourceId == transferOrderId && it.SourceType == Enums.InventorySourceTypeEnum.TransferOrderOut);
-            var fromInventoryQuantity = fromInventory.Quantity + (inventoryOut?.QuantityChange ?? 0) * -1;
+            /*** 核准前出庫的倉庫商品數量 = 核准後出庫的倉庫商品數量 + 此調貨單出庫紀錄的數量 * -1(乘-1是因為出庫紀錄的數量本身是負值) ***/
+            // 核准前出庫的倉庫商品數量
+            var fromInventoryQuantity = fromInventory.Quantity - (inventoryOut?.QuantityChange ?? 0) * -1;
+            // 此調貨單出庫紀錄的金額 = 此調貨單出庫紀錄的數量 * 此調貨單出庫紀錄的平均單價
             var inventoryOutCountPrice = inventoryOut?.QuantityChange * inventoryOut?.UnitCost ?? 0;
+
+            /***
+             * inventoryOutCountPrice * -1(乘-1是因為出庫紀錄的數量本身是負值)
+             * ***/
+            // 核准前出庫的倉庫商品平均單價 = (核准後出庫的倉庫商品平均單價 * 核准後出庫的倉庫商品數量 - 此調貨單出庫紀錄的金額 * -1) / 核准前出庫的倉庫商品數量
             var fromInventoryAverageCost = (fromInventory.AverageCost * fromInventory.Quantity + inventoryOutCountPrice * -1) / fromInventoryQuantity;
+            
             fromInventory.Quantity = fromInventoryQuantity;
             fromInventory.AverageCost = fromInventoryAverageCost;
             inventoryRepository.Update(fromInventory);
 
             /***
-             * 還原出庫數量，
+             * 還原入庫數量，
              * 還原AverageCost的值是採用平均值的方式計算
              * ***/
+            // 此調貨單入庫紀錄
             var inventoryIn = await inventoryTransactionRepository.GetFirstOrDefaultAsync(it => it.SourceId == transferOrderId && it.SourceType == Enums.InventorySourceTypeEnum.TransferOrderIn);
+            
+            /*** 核准前入庫的倉庫商品數量 = 核准後入庫的倉庫商品數量 - 此調貨單入庫紀錄的數量 ***/
+            // 核准前入庫的倉庫商品數量
             var toInventoryQuantity = toInventory.Quantity - inventoryIn?.QuantityChange ?? 0;
             decimal toInventoryAverageCost = 0;
             if (toInventoryQuantity is not 0)
             {
+                /***
+                 * 計算核准前入庫的倉庫商品平均單價
+                 * (toInventory.AverageCost * toInventory.Quantity - (inventoryIn?.QuantityChange ?? 0 * inventoryIn?.UnitCost ?? 0) / toInventoryQuantity);
+                 * 核准後入庫的倉庫商品平均單價(Inventory.AverageCost) * 核准後入庫的倉庫商品數量 - 此調貨單入庫紀錄的數量(InventoryTransaction.QuantityChange) * 此調貨單入庫紀錄的平均單價 / 還原後的數量 = 還原後的平均單價
+                 * 這裡是因為在調貨單入庫的時候，已經將成本計算好並寫入InventoryTransaction了，所以在還原的時候，可以直接從InventoryTransaction中拿到成本金額，然後用平均值的方式計算出還原後的AverageCost。
+                 * **/
                 toInventoryAverageCost = (toInventory.AverageCost * toInventory.Quantity - (inventoryIn?.QuantityChange ?? 0 * inventoryIn?.UnitCost ?? 0) / toInventoryQuantity);
             }
             toInventory.Quantity = toInventoryQuantity;
