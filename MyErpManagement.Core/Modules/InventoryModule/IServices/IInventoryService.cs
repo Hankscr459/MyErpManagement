@@ -26,7 +26,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.IServices
         /// <param name="fromInventory">出庫的庫存</param>
         /// <param name="toInventory">入庫的庫存</param>
         /// <returns></returns>
-        Task AddInventoryByCreateTransferOrder(TransferInventoryModel transferInventoryModel, Inventory fromInventory, Inventory? toInventory);
+        Task AddInventoryByTransferOrder(TransferInventoryModel transferInventoryModel, Inventory fromInventory, Inventory? toInventory);
         /// <summary>
         /// 還原核准後的調貨單,
         /// 還原的庫存金額會有意點誤差,因為採用平均成本法,所以會以目前庫存的平均成本為基礎去還原金額,不過數量是正確的
@@ -35,6 +35,6 @@ namespace MyErpManagement.Core.Modules.InventoryModule.IServices
         /// <param name="fromInventory">核准後出庫的庫存</param>
         /// <param name="toInventory">核准後入庫的庫存</param>
         /// <returns></returns>
-        Task<IEnumerable<InventoryTransaction?>> RestoreInventoryByCancelTransferOrder(Guid transferOrderId, Inventory fromInventory, Inventory toInventory);
+        Task<IEnumerable<InventoryTransaction?>> RestoreInventoryByTransferOrder(Guid transferOrderId, Inventory fromInventory, Inventory toInventory);
     }
 }

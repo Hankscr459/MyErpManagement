@@ -45,7 +45,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             inventoryRepository.Update(inventory);
         }
 
-        public async Task AddInventoryByCreateTransferOrder(TransferInventoryModel transferInventoryModel, Inventory fromInventory, Inventory? toInventory)
+        public async Task AddInventoryByTransferOrder(TransferInventoryModel transferInventoryModel, Inventory fromInventory, Inventory? toInventory)
         {
             fromInventory.Quantity = fromInventory.Quantity - transferInventoryModel?.Quantity ?? 0;
             inventoryRepository.Update(fromInventory);
@@ -69,7 +69,7 @@ namespace MyErpManagement.Core.Modules.InventoryModule.Services
             }
         }
 
-        public async Task<IEnumerable<InventoryTransaction?>> RestoreInventoryByCancelTransferOrder(Guid transferOrderId, Inventory fromInventory, Inventory toInventory)
+        public async Task<IEnumerable<InventoryTransaction?>> RestoreInventoryByTransferOrder(Guid transferOrderId, Inventory fromInventory, Inventory toInventory)
         {
             /***
              * 還原出庫數量，

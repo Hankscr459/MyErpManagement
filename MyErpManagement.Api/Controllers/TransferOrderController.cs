@@ -99,7 +99,7 @@ namespace MyErpManagement.Api.Controllers
                     var toInventory = await unitOfWork.InventoryRepository.GetFirstOrDefaultAsync(
                         i => i.WareHouseId == transferOrder.ToWareHouseId && i.ProductId == line.ProductId
                     );
-                    await inventoryService.AddInventoryByCreateTransferOrder(transferInventoryArg, fromInventory, toInventory);
+                    await inventoryService.AddInventoryByTransferOrder(transferInventoryArg, fromInventory, toInventory);
 
                     var transferInventoryTransactionModel = new TransferInventoryTransactionModel{
                         ProductId = line.ProductId,
@@ -162,7 +162,7 @@ namespace MyErpManagement.Api.Controllers
                         await unitOfWork.RollbackAsync();
                         return NotFound(new ApiResponseDto(HttpStatusCode.NotFound, ResponseTextConstant.NotFound.Inventory));
                     }
-                    var inventoryTransactions = await inventoryService.RestoreInventoryByCancelTransferOrder(transferOrder.Id, fromInventory, toInventory);
+                    var inventoryTransactions = await inventoryService.RestoreInventoryByTransferOrder(transferOrder.Id, fromInventory, toInventory);
                     if (inventoryTransactions is not null & inventoryTransactions?.Count() == 0) {                         await unitOfWork.RollbackAsync();
                         await unitOfWork.RollbackAsync();
                         return BadRequest(new ApiResponseDto(HttpStatusCode.BadRequest, ResponseTextConstant.BadRequest.FailToCancelTransferOrder));
